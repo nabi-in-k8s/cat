@@ -3,7 +3,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: tls-issuer
-  namespace: registry
+  namespace: image-registry
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
