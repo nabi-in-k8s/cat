@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry-service
+  namespace: registry
+spec:
+  selector:
+    app: registry-pod
+  ports:
+    - port: 80
+      targetPort: 5000
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: registry-pod
+  namespace: registry
+  labels:
+    app: registry-pod
+spec:
+  replicas: 1
+  containers:
+    - name: registry-service
+      image: registry
+      ports:
+        - containerPort: 5000
+      volumeMounts:
+        - name: registry-pvc
+          mountPath: /var/lib/registry
+      resources:
+        limits:
+          cpu: "0.5"
+          memory: "1Gi"
+  volumes:
+    - name: registry-pvc
+      persistentVolumeClaim:
+        claimName: registry-pvc

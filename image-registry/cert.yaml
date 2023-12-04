@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tls-cert
+  namespace: registry
+spec:
+  secretName: tls-secret
+  issuerRef:
+    name: tls-issuer
+  dnsNames:
+    - registry.k8s.nabi.kim
