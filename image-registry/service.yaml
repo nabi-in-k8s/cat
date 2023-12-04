@@ -18,9 +18,8 @@ metadata:
   labels:
     app: registry-pod
 spec:
-  replicas: 1
   containers:
-    - name: registry-service
+    - name: registry-pod
       image: registry
       ports:
         - containerPort: 5000
@@ -32,7 +31,7 @@ spec:
           readOnly: true
       resources:
         limits:
-          cpu: "0.5"
+          cpu: 500m
           memory: "1Gi"
       env:
         - name: REGISTRY_HTTP_ADDR
@@ -40,7 +39,7 @@ spec:
         - name: REGISTRY_AUTH
           value: htpasswd
         - name: REGISTRY_AUTH_HTPASSWD_REALM
-          value: registry-service
+          value: registry-pod
         - name: REGISTRY_AUTH_HTPASSWD_PATH
           value: /auth/registry.password
   volumes:
