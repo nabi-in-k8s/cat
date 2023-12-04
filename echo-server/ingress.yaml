@@ -5,7 +5,7 @@ metadata:
   namespace: echo-server
   annotations:
     kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-to-https@kubernetescrd
 spec:
   rules:
     - host: echo-server.k8s.nabi.kim
