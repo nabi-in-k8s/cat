@@ -12,5 +12,5 @@ spec:
   mountOptions:
     - hard
     - nfsvers=4.1
-  local:
+  hostPath:
     path: /data/registry
