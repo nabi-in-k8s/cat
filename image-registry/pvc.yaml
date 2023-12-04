@@ -7,6 +7,5 @@ spec:
   resources:
     requests:
       storage: 250Gi
-  storageClassName: registry-storage
   accessModes:
     - ReadWriteOnce
