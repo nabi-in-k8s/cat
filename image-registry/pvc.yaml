@@ -4,6 +4,7 @@ metadata:
   name: registry-pvc
   namespace: registry
 spec:
+  storageClassName: manual
   resources:
     requests:
       storage: 250Gi

@@ -8,6 +8,7 @@ spec:
     storage: 250Gi
   accessModes:
     - ReadWriteOnce
+  storageClassName: manual
   persistentVolumeReclaimPolicy: Retain
   hostPath:
     path: /data/registry
