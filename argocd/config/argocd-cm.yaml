@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+  name: argocd-cm
+  namespace: argocd
+data:
+  url: https://argo-cd.k8s.nabi.kim
+  dex.config: |
+    connectors:
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientId: "5a59746fe041e3b2da81"
+          clientSecret: "9b4f499f0bdd5affef832013ee27a32821aa5b4b"
+          orgs:
+            - name: "nabi-in-k8s"
