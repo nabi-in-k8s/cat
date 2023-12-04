@@ -4,7 +4,7 @@ metadata:
   name: tls-cert
   namespace: registry
 spec:
-  secretName: tls-secret
+  secretName: registry-tls
   issuerRef:
     name: tls-issuer
   dnsNames:
