@@ -1,0 +1,14 @@
+apiVersion: v2
+
+name: argo-cd
+description: argo-cd for GitOps
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: argo-cd
+    alias: argo
+    version: 6.7.12
+    repository: oci://ghcr.io/argoproj/argo-helm
+    condition: argo.enabled

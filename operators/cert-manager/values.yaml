@@ -1,0 +1,12 @@
+cert:
+  enabled: true
+  installCRDs: true
+
+clusterIssuer:
+  enabled: true
+
+  staging:
+    acmeEmail: server+staging@nabi.kim
+
+  prod:
+    acmeEmail: server+production@nabi.kim
