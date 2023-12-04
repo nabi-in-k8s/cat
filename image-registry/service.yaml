@@ -27,11 +27,26 @@ spec:
       volumeMounts:
         - name: registry-pvc
           mountPath: /var/lib/registry
+        - name: registry-auth
+          mountPath: /auth
+          readOnly: true
       resources:
         limits:
           cpu: "0.5"
           memory: "1Gi"
+      env:
+        - name: REGISTRY_HTTP_ADDR
+          value: 0.0.0.0:5000
+        - name: REGISTRY_AUTH
+          value: htpasswd
+        - name: REGISTRY_AUTH_HTPASSWD_REALM
+          value: registry-pod
+        - name: REGISTRY_AUTH_HTPASSWD_PATH
+          value: /auth/registry.password
   volumes:
     - name: registry-pvc
       persistentVolumeClaim:
         claimName: registry-pvc
+    - name: registry-auth
+      secret:
+        secretName: registry-auth
