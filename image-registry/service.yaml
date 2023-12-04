@@ -25,6 +25,8 @@ spec:
       labels:
         app: registry-pod
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: registry-container
           image: registry
