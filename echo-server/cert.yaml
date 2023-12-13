@@ -7,5 +7,6 @@ spec:
   secretName: tls-secret
   issuerRef:
     name: tls-issuer
+    kind: ClusterIssuer
   dnsNames:
-    - echo-server.k8s.nabi.kim
+  - echo-server.k8s.nabi.kim

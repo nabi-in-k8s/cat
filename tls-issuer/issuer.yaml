@@ -1,17 +1,15 @@
----
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: tls-issuer
-  namespace: echo-server
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
     email: account@nabi.kim
     privateKeySecretRef:
-      name: tls-key
+      name: letsencrypt-prod
     solvers:
-      - selector: {}
-        http01:
-          ingress:
-            class: traefik
+    - selector: {}
+      http01:
+        ingress:
+          class: traefik

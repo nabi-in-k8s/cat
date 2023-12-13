@@ -7,6 +7,7 @@ spec:
   secretName: argocd-secret
   issuerRef:
     name: tls-issuer
+    kind: ClusterIssuer
   commonName: argo-cd.k8s.nabi.kim
   dnsNames:
-    - argo-cd.k8s.nabi.kim
+  - argo-cd.k8s.nabi.kim
