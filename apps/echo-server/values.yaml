@@ -1,0 +1,25 @@
+echo-server:
+  enabled: true
+  fullnameOverride: echo-server
+
+  image:
+    repository: ealen/echo-server
+    pullPolicy: IfNotPresent
+    tag: latest
+
+  tls:
+    enabled: true
+    secretName: "echo-server-tls"
+    domains:
+    - echo-server.k8s.nabi.kim
+
+  ingress:
+    enabled: true
+    annotations:
+      "kubernetes.io/ingress.class": "traefik"
+      "traefik.ingress.kubernetes.io/router.entrypoints": "websecure"
+    hosts:
+    - host: echo-server.k8s.nabi.kim
+      paths:
+      - path: /
+        pathType: ImplementationSpecific

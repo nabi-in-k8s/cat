@@ -1,0 +1,6 @@
+dependencies:
+- name: cat-general
+  repository: oci://registry.k8s.nabi.kim
+  version: 0.1.0
+digest: sha256:7fda1f4ea55180d2fac1bd34e2964c775448d2376885d5ba3faed051922ed26b
+generated: "2023-12-13T21:27:39.737386+09:00"
