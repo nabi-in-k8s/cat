@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cat-general.fullname" . }}
+  namespace: {{ include "cat-general.namespace" . }}
+  labels:
+    {{- include "cat-general.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "cat-general.selectorLabels" . | nindent 4 }}

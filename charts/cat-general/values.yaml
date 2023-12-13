@@ -1,0 +1,31 @@
+replicaCount: 1
+
+nameOverride: ""
+namespaceOverride: ""
+
+image:
+  repository: ""
+  pullPolicy: ""
+  tag: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+tls:
+  enabled: false
+  secretName: ""
+  domains: []
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+  - host: "template.k8s.nabi.kim"
+    paths:
+    - path: /
+      pathType: ImplementationSpecific
+
+resources: {}
+
