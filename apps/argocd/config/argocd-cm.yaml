@@ -18,3 +18,4 @@ data:
           clientSecret: "9b4f499f0bdd5affef832013ee27a32821aa5b4b"
           orgs:
             - name: "nabi-in-k8s"
+  accounts.image-updater: apiKey
