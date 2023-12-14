@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-    - host: argo-cd.k8s.nabi.kim
+    - host: old-argo-cd.k8s.nabi.kim
       http:
         paths:
           - path: /
@@ -18,6 +18,6 @@ spec:
                 port:
                   name: http
   tls:
-    - secretName: argocd-secret
+    - secretName: old-argocd-secret
       hosts:
-        - argo-cd.k8s.nabi.kim
+        - old-argo-cd.k8s.nabi.kim

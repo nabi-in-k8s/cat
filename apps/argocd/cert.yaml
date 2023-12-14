@@ -4,10 +4,10 @@ metadata:
   name: argocd-cert
   namespace: argocd
 spec:
-  secretName: argocd-secret
+  secretName: old-argocd-secret
   issuerRef:
     name: tls-issuer
     kind: ClusterIssuer
-  commonName: argo-cd.k8s.nabi.kim
+  commonName: old-argo-cd.k8s.nabi.kim
   dnsNames:
-  - argo-cd.k8s.nabi.kim
+    - old-argo-cd.k8s.nabi.kim
