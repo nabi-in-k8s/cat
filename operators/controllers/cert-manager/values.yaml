@@ -1,0 +1,10 @@
+cert-manager:
+  enabled: false
+  namespace: ""
+  installCRDs: false
+
+clusterIssuer:
+  enabled: false
+  name: ""
+  email: ""
+  server: ""
