@@ -2,7 +2,7 @@ cronjob:
   enabled: true
 
 argo-cd:
-  enabled: false
+  enabled: true
 
   ## Argo CD configuration
   ## Ref: https://github.com/argoproj/argo-cd
@@ -168,7 +168,7 @@ argo-cd:
       annotations: {}
 
       # -- Argo CD's externally facing base URL (optional). Required when configuring SSO
-      url: ""
+      url: "https://argocd.k8s.nabi.kim"
 
       # -- The name of tracking label used by Argo CD for resource pruning
       # @default -- Defaults to app.kubernetes.io/instance
@@ -184,7 +184,7 @@ argo-cd:
 
       # -- Enable local admin user
       ## Ref: https://argo-cd.readthedocs.io/en/latest/faq/#how-to-disable-admin-user
-      admin.enabled: true
+      admin.enabled: false
 
       # -- Timeout to discover if a new manifests version got published to the repository
       timeout.reconciliation: 180s
@@ -193,17 +193,16 @@ argo-cd:
       timeout.hard.reconciliation: 0s
 
       # Dex configuration
-      # dex.config: |
-      #   connectors:
-      #     # GitHub example
-      #     - type: github
-      #       id: github
-      #       name: GitHub
-      #       config:
-      #         clientID: aabbccddeeff00112233
-      #         clientSecret: $dex.github.clientSecret # Alternatively $<some_K8S_secret>:dex.github.clientSecret
-      #         orgs:
-      #         - name: your-github-org
+      dex.config: |
+        connectors:
+          - type: github
+            id: github
+            name: GitHub
+            config:
+              clientID: 21228a2aabf4a25fcc47
+              clientSecret: $dex.github.clientSecret # Alternatively $<some_K8S_secret>:dex.github.clientSecret
+              orgs:
+              - name: nabi-in-k8s
 
       # OIDC configuration as an alternative to dex (optional).
       # oidc.config: |
@@ -245,7 +244,7 @@ argo-cd:
 
       ## Server properties
       # -- Run server without TLS
-      server.insecure: false
+      server.insecure: true
       # -- Value for base href in index.html. Used if Argo CD is running behind reverse proxy under subpath different from /
       server.basehref: /
       # -- Used if Argo CD is running behind reverse proxy under subpath different from /
@@ -282,11 +281,12 @@ argo-cd:
 
       # -- The name of the default role which Argo CD will falls back to, when authorizing API requests (optional).
       # If omitted or empty, users may be still be able to login, but will see no apps, projects, etc...
-      policy.default: ""
+      policy.default: "role:readonly"
 
       # -- File containing user-defined policies and role definitions.
       # @default -- `''` (See [values.yaml])
-      policy.csv: ""
+      policy.csv: |
+        g, account@nabi.kim, role:admin
       # Policy rules are in the form:
       #  p, subject, resource, action, object, effect
       # Role definitions and bindings are in the form:
@@ -301,7 +301,7 @@ argo-cd:
 
       # -- OIDC scopes to examine during rbac enforcement (in addition to `sub` scope).
       # The scope value can be a string, or a list of strings.
-      scopes: "[groups]"
+      scopes: "[groups, email]"
 
     # GnuPG public keys for commit verification
     ## Ref: https://argo-cd.readthedocs.io/en/stable/user-guide/gpg-verification/
@@ -1719,11 +1719,11 @@ argo-cd:
     ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/tls/#tls-certificates-used-by-argocd-server
     certificate:
       # -- Deploy a Certificate resource (requires cert-manager)
-      enabled: false
+      enabled: true
       # -- The name of the Secret that will be automatically created and managed by this Certificate resource
       secretName: argocd-server-tls
       # -- Certificate primary domain (commonName)
-      domain: argocd.example.com
+      domain: argocd.k8s.nabi.kim
       # -- Certificate Subject Alternate Names (SANs)
       additionalHosts: []
       # -- The requested 'duration' (i.e. lifetime) of the certificate.
@@ -1740,9 +1740,9 @@ argo-cd:
         # -- Certificate issuer group. Set if using an external issuer. Eg. `cert-manager.io`
         group: ""
         # -- Certificate issuer kind. Either `Issuer` or `ClusterIssuer`
-        kind: ""
+        kind: "ClusterIssuer"
         # -- Certificate issuer name. Eg. `letsencrypt`
-        name: ""
+        name: "letsencrypt-prod"
       # Private key of the certificate
       privateKey:
         # -- Rotation policy of private key when certificate is re-issued. Either: `Never` or `Always`
@@ -1850,19 +1850,20 @@ argo-cd:
 
     ingress:
       # -- Enable an ingress resource for the Argo CD server
-      enabled: false
+      enabled: true
       # -- Additional ingress annotations
       annotations: {}
       # -- Additional ingress labels
       labels: {}
       # -- Defines which ingress controller will implement the resource
-      ingressClassName: ""
+      ingressClassName: "nginx"
 
       # -- List of ingress hosts
       ## Argo Ingress.
       ## Hostnames must be provided if Ingress is enabled.
       ## Secrets must be manually created in the namespace
-      hosts: []
+      hosts:
+        - argocd.k8s.nabi.kim
       # - argocd.example.com
 
       # -- List of ingress paths
@@ -1883,13 +1884,12 @@ argo-cd:
 
       # -- Ingress TLS configuration
       tls:
-        []
-        # - secretName: your-certificate-name
-        #   hosts:
-        #     - argocd.example.com
+        - secretName: argocd-server-tls
+          hosts:
+            - argocd.k8s.nabi.kim
 
       # -- Uses `server.service.servicePortHttps` instead `server.service.servicePortHttp`
-      https: false
+      https: true
 
     # dedicated ingress for gRPC as documented at
     # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/
