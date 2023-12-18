@@ -16,16 +16,18 @@ tls:
   enabled: false
   secretName: ""
   domains: []
+  issuer:
+    name: ""
+    kind: ""
 
 ingress:
   enabled: false
   className: ""
   annotations: {}
   hosts:
-  - host: "template.k8s.nabi.kim"
-    paths:
-    - path: /
-      pathType: ImplementationSpecific
+    - host: "template.k8s.nabi.kim"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
 
 resources: {}
-

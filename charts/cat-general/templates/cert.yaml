@@ -1,5 +1,5 @@
 {{- if .Values.tls.enabled -}}
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ include "cat-general.fullname" . }}
@@ -7,8 +7,8 @@ metadata:
 spec:
   secretName: {{ .Values.tls.secretName }}
   issuerRef:
-    name: tls-issuer
-    kind: ClusterIssuer
+    name: {{ .Values.tls.issuer.name }}
+    kind: {{ .Values.tls.issuer.kind | default "ClusterIssuer"  }}
   dnsNames:
     {{- range .Values.tls.domains }}
     - {{ . }}

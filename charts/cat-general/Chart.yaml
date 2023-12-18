@@ -3,4 +3,4 @@ name: cat-general
 description: A Helm chart for general service in Nabi's projects.
 
 type: application
-version: 0.1.0
+version: 0.1.2

@@ -1,6 +1,6 @@
 dependencies:
 - name: cat-general
   repository: oci://hub.k8s.nabi.kim
-  version: 0.1.0
-digest: sha256:1263793ee1d7ca00d7092f553d129df86b3577a34798246dfadb5238f45a75f0
-generated: "2023-12-19T00:49:28.6836+09:00"
+  version: 0.1.2
+digest: sha256:feb6d02fb1575a32825a6a36664a3b1b0e0dfdaed29295010a6c9a6c8f1b5510
+generated: "2023-12-19T01:44:36.664377+09:00"

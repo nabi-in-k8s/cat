@@ -12,6 +12,9 @@ echo-server:
     secretName: "echo-server-tls"
     domains:
       - echo-server.k8s.nabi.kim
+    issuer:
+      name: "letsencrypt-prod"
+      kind: "ClusterIssuer"
 
   ingress:
     enabled: true
