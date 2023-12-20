@@ -6,6 +6,17 @@ cert:
     kind: ""
   dnsNames: []
 
+rbac:
+  admin:
+    enabled: true
+    rbacRule:
+      matchGroups: "nabi-in-k8s:Owner"
+      precedence: "1"
+  readonly:
+    enabled: true
+    rbacRule:
+      default: true
+
 argo-workflows:
   enabled: false
 

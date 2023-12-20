@@ -1,0 +1,29 @@
+{{- if .Values.rbac.admin.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ printf "%s-rbac-admin" (include "argo-workflows.fullname" (index $ "Subcharts" "argo-workflows")) | trunc 63 | trimSuffix "-" }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ printf "%s-rbac-admin" (include "argo-workflows.fullname" (index $ "Subcharts" "argo-workflows")) | trunc 63 | trimSuffix "-" }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ printf "%s-rbac-admin" (include "argo-workflows.fullname" (index $ "Subcharts" "argo-workflows")) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+---
+{{- if .Values.rbac.readonly.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ printf "%s-rbac-readonly" (include "argo-workflows.fullname" (index $ "Subcharts" "argo-workflows")) | trunc 63 | trimSuffix "-" }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ printf "%s-rbac-readonly" (include "argo-workflows.fullname" (index $ "Subcharts" "argo-workflows")) | trunc 63 | trimSuffix "-" }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ printf "%s-rbac-readonly" (include "argo-workflows.fullname" (index $ "Subcharts" "argo-workflows")) | trunc 63 | trimSuffix "-" }}
+{{- end }}

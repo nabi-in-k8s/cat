@@ -292,7 +292,7 @@ argo-cd:
       # -- File containing user-defined policies and role definitions.
       # @default -- `''` (See [values.yaml])
       policy.csv: |
-        g, account@nabi.kim, role:admin
+        g, nabi-in-k8s:Owner, role:admin
       # Policy rules are in the form:
       #  p, subject, resource, action, object, effect
       # Role definitions and bindings are in the form:

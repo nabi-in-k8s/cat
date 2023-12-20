@@ -1,0 +1,33 @@
+{{- if .Values.rbac.readonly.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ printf "%s-rbac-readonly" (include "argo-workflows.fullname" (index $ "Subcharts" "argo-workflows")) | trunc 63 | trimSuffix "-" }}
+rules:
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - "workflows"
+      - "workflowtemplates"
+      - "cronworkflows"
+      - "clusterworkflowtemplates"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+  - apiGroups:
+      - ""
+    resources:
+      - "pods"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+  - apiGroups:
+      - ""
+    resources:
+      - "pods/log"
+    verbs:
+      - "get"
+      - "list"
+{{- end }}
