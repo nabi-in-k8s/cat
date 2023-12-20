@@ -13,6 +13,9 @@ argo-workflows:
   useStaticCredentials: true
 
   workflow:
+    serviceAccount:
+      create: true
+      name: "default"
     rbac:
       create: true
 
