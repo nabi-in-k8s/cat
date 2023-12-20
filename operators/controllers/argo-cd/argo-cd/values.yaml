@@ -203,6 +203,12 @@ argo-cd:
               clientSecret: $dex.github.clientSecret # Alternatively $<some_K8S_secret>:dex.github.clientSecret
               orgs:
               - name: nabi-in-k8s
+        staticClients:
+          - id: argo-workflows-sso
+            name: Argo Workflow
+            redirectURIs:
+              - https://argo-workflows.k8s.nabi.kim/oauth2/callback
+            secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
 
       # OIDC configuration as an alternative to dex (optional).
       # oidc.config: |
@@ -953,7 +959,12 @@ argo-cd:
       imagePullPolicy: ""
 
     # -- Environment variables to pass to the Dex server
-    env: []
+    env:
+      - name: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: argo-workflows-sso
+            key: client-secret
 
     # -- envFrom to pass to the Dex server
     # @default -- `[]` (See [values.yaml])
