@@ -7,10 +7,7 @@ rules:
   - apiGroups:
       - argoproj.io
     resources:
-      - "workflows"
-      - "workflowtemplates"
-      - "cronworkflows"
-      - "clusterworkflowtemplates"
+      - "*"
     verbs:
       - "*"
   - apiGroups:
