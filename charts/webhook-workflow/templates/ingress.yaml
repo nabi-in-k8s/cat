@@ -1,0 +1,35 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "webhook-workflow.fullname" . }}
+  namespace: {{ include "webhook-workflow.namespace" . }}
+  labels:
+    {{ include "webhook-workflow.labels" . | nindent 4 }}
+  annotations: {{ .Values.ingress.annotations | toYaml | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
+  rules:
+    {{- range .Values.ingress.hosts }}
+      - host: {{ . | quote }}
+        http:
+          paths:
+          {{- range $.Values.ingress.paths }}
+            - path: {{ .path | quote }}
+              pathType: {{ .pathType | quote }}
+              backend:
+                service:
+                  name: {{ default (include "webhook-workflow.fullname" $) .backend.service.name -}}-eventsource-svc
+                  port:
+                    {{ toYaml .backend.service.port | nindent 20 }}
+          {{- end }}
+    {{- end }}
+
+  tls:
+  {{- range .Values.ingress.tls }}
+    - hosts:
+        {{ toYaml .hosts | nindent 8 }}
+      secretName: {{ .secretName }}
+  {{- end }}
+
+{{- end -}}

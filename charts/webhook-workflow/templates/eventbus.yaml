@@ -1,0 +1,16 @@
+{{- if .Values.eventbus.enabled -}}
+apiVersion: argoproj.io/v1alpha1
+kind: EventBus
+metadata:
+  name: default
+  namespace: {{ include "webhook-workflow.namespace" . }}
+  labels:
+    {{ include "webhook-workflow.labels" . | nindent 4 }}
+spec:
+  nats:
+    {{- if .Values.eventbus.nats }}
+    {{- .Values.eventbus.nats | toYaml | nindent 4 }}
+    {{- else }}
+    native: {}
+    {{- end }}
+{{- end -}}

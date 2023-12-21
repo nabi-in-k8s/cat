@@ -1,0 +1,13 @@
+apiVersion: v2
+name: sample-workflow
+description: A sample workflow triggered by webhook.
+
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: webhook-workflow
+    alias: workflow
+    version: 1.0.5
+    repository: oci://hub.k8s.nabi.kim
+    condition: workflow.enabled

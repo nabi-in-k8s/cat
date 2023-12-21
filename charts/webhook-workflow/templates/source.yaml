@@ -1,0 +1,22 @@
+{{- if .Values.webhook.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: {{ include "webhook-workflow.fullname" . }}
+  namespace: {{ include "webhook-workflow.namespace" . }}
+  labels:
+    {{- include "webhook-workflow.labels" . | nindent 4 }}
+spec:
+  service:
+    ports:
+    {{- range $i, $val := .Values.webhook.service.ports }}
+      - name: {{ $val.name | quote }}
+        port: {{ $val.port }}
+        targetPort: {{ $val.targetPort }}
+    {{- end }}
+
+  webhook:
+    {{- with .Values.webhook.endpoint }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
+{{- end }}

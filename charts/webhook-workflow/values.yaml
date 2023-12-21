@@ -1,0 +1,101 @@
+nameOverride: ""
+fullnameOverride: ""
+namespaceOverride: ""
+
+cert:
+  enabled: false
+  secretName: "" # webhook-workflow-certs
+  issuerRef:
+    name: "" # webhook-workflow-issuer
+    kind: "" # ClusterIssuer
+  dnsNames:
+    - "" # webhook-workflow.default.svc
+
+ingress:
+  enabled: false
+  annotations: {}
+  ingressClassName: "" # nginx
+  hosts:
+    - "" # webhook-workflow.default.svc
+  paths:
+    - path: "/"
+      pathType: Prefix
+      backend:
+        service:
+          name: "" # webhook-workflow
+          port: {}
+          # number: 0 # 12000
+  tls: []
+  # - hosts:
+  #   - "webhook-workflow.default.svc"
+  #   secretName: "webhook-workflow-certs"
+
+rbac:
+  create: false
+  serviceAccountName: "" # webhook-workflow-sa
+
+  # workflow role
+  workflow:
+    create: false
+    roleNamePrefix: "" # webhook-workflow-workflow
+
+  # sensor role
+  sensor:
+    create: false
+    roleNamePrefix: "" # webhook-workflow-sensor
+
+eventbus:
+  enabled: false
+  nats: {}
+
+webhook:
+  enabled: false
+
+  service:
+    ports: []
+    # - name: webhook
+    #   port: 12000
+    #   targetPort: 12000
+
+  endpoint: {}
+  # example:
+  #   port: "12000"
+  #   endpoint: /webhook
+  #   method: POST
+
+  dependencies: []
+  # - name: webhook-workflow
+  #   eventSourceName: webhook
+  #   eventName: webhook-workflow
+
+  triggers: []
+  # - template:
+  #     name: webhook-workflow-trigger
+  #     k8s:
+  #       operation: create
+  #       source:
+  #         resource:
+  #           apiVersion: argoproj.io/v1alpha1
+  #           kind: Workflow
+  #           metadata:
+  #             generateName: webhook-workflow-
+  #           spec:
+  #             entrypoint: whalesay
+  #             arguments:
+  #               parameters:
+  #                 - name: message
+  #                   value: ""
+  #             templates:
+  #               - name: whalesay
+  #                 inputs:
+  #                   parameters:
+  #                     - name: message
+  #                 container:
+  #                   image: docker/whalesay:latest
+  #                   command: [cowsay]
+  #                   args: ["{{inputs.parameters.message}}"]
+  #     parameters:
+  #       - src:
+  #           dependencyName: webhook
+  #           dataKey: body
+  #           dest: spec.arguments.parameters.0.value

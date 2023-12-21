@@ -1,0 +1,82 @@
+{{- if .Values.rbac.create -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.rbac.serviceAccountName }}
+  namespace: {{ include "webhook-workflow.namespace" . }}
+  labels:
+    {{ include "webhook-workflow.labels" . | nindent 4 }}
+
+---
+
+{{- if .Values.rbac.workflow.create -}}
+# workflow-role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Values.rbac.workflow.roleNamePrefix }}-role
+  namespace: {{ include "webhook-workflow.namespace" . }}
+  labels:
+    {{ include "webhook-workflow.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - argoproj.io
+    verbs:
+      - "*"
+    resources:
+      - workflows
+      - workflowtemplates
+      - cronworkflows
+      - clusterworkflowtemplates
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Values.rbac.workflow.roleNamePrefix }}-rolebinding
+  namespace: {{ include "webhook-workflow.namespace" . }}
+  labels:
+    {{ include "webhook-workflow.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Values.rbac.workflow.roleNamePrefix }}-role
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.rbac.serviceAccountName }}
+---
+{{- end -}}
+
+{{- if .Values.rbac.sensor.create -}}
+# sensor-role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Values.rbac.sensor.roleNamePrefix }}-role
+  namespace: {{ include "webhook-workflow.namespace" . }}
+  labels:
+    {{ include "webhook-workflow.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - workflowtaskresults
+    verbs:
+      - create
+      - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Values.rbac.sensor.roleNamePrefix }}-rolebinding
+  namespace: {{ include "webhook-workflow.namespace" . }}
+  labels:
+    {{ include "webhook-workflow.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Values.rbac.sensor.roleNamePrefix }}-role
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "webhook-workflow.fullname" . }}
+{{- end -}}
+{{- end -}}
