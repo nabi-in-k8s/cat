@@ -1,0 +1,6 @@
+apiVersion: v2
+name: gh-eventsource
+description: A Helm chart for workflow triggered by github.
+
+type: application
+version: 0.0.1

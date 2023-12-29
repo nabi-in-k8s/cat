@@ -1,0 +1,76 @@
+service:
+  # service port (default: 12000)
+  port: 12000
+
+github:
+  # allowed github repositories
+  repositories: []
+  # - owner: "owner"
+  #   names:
+  #     - "example-repo"
+
+webhook:
+  # url the event-source will use to register at Github.
+  url: "https://fake-url.com/webhook"
+  # endpoint to listen for Github events
+  endpoint: "/webhook"
+  # port to run internal HTTP server on
+  port: 12000
+  # allow events from Github to be processed
+  # You can find more info on https://developer.github.com/v3/activity/events/types/
+  events: []
+  # - "push"
+
+  # type of the connection between event-source and Github.
+  # You should set it to false to avoid man-in-the-middle and other attacks.
+  insecure: true
+  # Determines if notifications are sent when the webhook is triggered
+  active: true
+  # The media type used to serialize the payloads
+  contentType: "json"
+  # apiToken refers to K8s secret that stores the github api token
+  # if apiToken is provided controller will create webhook on GitHub repo
+  apiToken:
+    # Name of the K8s secret that contains the access token
+    name: "github-access"
+    # Key within the K8s secret whose corresponding value is access token
+    key: "secret"
+
+certificate:
+  # enable certificate generation
+  enabled: false
+
+  # certificate secret name
+  secretName: "gh-eventsource-certs"
+
+  issuerRef:
+    name: "gh-eventsource-issuer"
+    # kind: "ClusterIssuer"
+
+  # certificate dnsNames
+  dnsNames: []
+  # - "example.com"
+
+ingress:
+  # ingress service enabled
+  enabled: false
+
+  # ingress annotations
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+
+  # ingress hostnames
+  hosts: []
+  # - example.com
+
+  # ingress path
+  paths: []
+  # - path: /
+  #   pathType: Prefix
+
+  # ingress tls configuration
+  tls: []
+  # - secretName: chart-example-tls
+  #   hosts:
+  #     - example.com
