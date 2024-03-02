@@ -168,7 +168,7 @@ argo-cd:
       annotations: {}
 
       # -- Argo CD's externally facing base URL (optional). Required when configuring SSO
-      url: "https://argocd.k8s.nabi.kim"
+      url: "https://argo-cd.k8s.nabi.kim"
 
       # -- The name of tracking label used by Argo CD for resource pruning
       # @default -- Defaults to app.kubernetes.io/instance
@@ -1734,7 +1734,7 @@ argo-cd:
       # -- The name of the Secret that will be automatically created and managed by this Certificate resource
       secretName: argocd-server-tls
       # -- Certificate primary domain (commonName)
-      domain: argocd.k8s.nabi.kim
+      domain: argo-cd.k8s.nabi.kim
       # -- Certificate Subject Alternate Names (SANs)
       additionalHosts: []
       # -- The requested 'duration' (i.e. lifetime) of the certificate.
@@ -1874,7 +1874,7 @@ argo-cd:
       ## Hostnames must be provided if Ingress is enabled.
       ## Secrets must be manually created in the namespace
       hosts:
-        - argocd.k8s.nabi.kim
+        - argo-cd.k8s.nabi.kim
       # - argocd.example.com
 
       # -- List of ingress paths
@@ -1897,7 +1897,7 @@ argo-cd:
       tls:
         - secretName: argocd-server-tls
           hosts:
-            - argocd.k8s.nabi.kim
+            - argo-cd.k8s.nabi.kim
 
       # -- Uses `server.service.servicePortHttps` instead `server.service.servicePortHttp`
       https: true
