@@ -1,0 +1,12 @@
+apiVersion: v2
+name: common-database
+description: database cluster with cloudnative-pg
+
+type: application
+version: 1.0.0
+dependencies:
+  - name: cluster
+    alias: cluster
+    version: 0.0.2
+    repository: https://cloudnative-pg.io/charts
+    condition: cluster.enabled
