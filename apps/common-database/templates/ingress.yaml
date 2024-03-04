@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: common-database-ingress
+  namespace: common-database
+  labels:
+    app: common-database-ingress
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}"
+    app.kubernetes.io/name: {{ default .Chart.Name .Values.nameOverride }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "common-db-read.k8s.nabi.kim"
+      postgres:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              serviceName: "common-database-cluster-r"
+              servicePort: postgres
+    - host: "common-db-master.k8s.nabi.kim"
+      postgres:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              serviceName: "common-database-cluster-rw"
+              servicePort: postgres
+  tls:
+    - hosts:
+      - "common-db-read.k8s.nabi.kim"
+      - "common-db-master.k8s.nabi.kim"
+      secretName: 'common-database-tls'
