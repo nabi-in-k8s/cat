@@ -47,6 +47,7 @@ nginx-ingress:
     containerPort:
       http: 80
       https: 443
+      postgres: 5432
     # -- Will add custom configuration options to Nginx https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
     config: {}
     # -- Annotations to be added to the controller config configuration configmap.
@@ -104,6 +105,8 @@ nginx-ingress:
         http: 80
         # -- 'hostPort' https port
         https: 443
+        # -- 'hostPort' postgresql port
+        postgres: 5432
     # NetworkPolicy for controller component.
     networkPolicy:
       # -- Enable 'networkPolicy' or not
@@ -499,9 +502,11 @@ nginx-ingress:
       ports:
         http: 80
         https: 443
+        postgres: 5432
       targetPorts:
         http: http
         https: https
+        postgres: 5432
       type: LoadBalancer
       ## type: NodePort
       ## nodePorts:

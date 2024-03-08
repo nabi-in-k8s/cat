@@ -14,21 +14,25 @@ spec:
   ingressClassName: nginx
   rules:
     - host: "common-db-read.k8s.nabi.kim"
-      postgres:
+      http:
         paths:
           - path: /
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
-              serviceName: "common-database-cluster-r"
-              servicePort: postgres
+              service:
+                name: "common-database-cluster-r"
+                port: 
+                  number: 5432
     - host: "common-db-master.k8s.nabi.kim"
-      postgres:
+      http:
         paths:
           - path: /
-            pathType: ImplementationSpecific
+            pathType: Prefix
             backend:
-              serviceName: "common-database-cluster-rw"
-              servicePort: postgres
+              service:
+                name: "common-database-cluster-rw"
+                port:
+                  number: 5432
   tls:
     - hosts:
       - "common-db-read.k8s.nabi.kim"
