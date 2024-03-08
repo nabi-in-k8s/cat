@@ -47,7 +47,6 @@ nginx-ingress:
     containerPort:
       http: 80
       https: 443
-      postgres: 5432
     # -- Will add custom configuration options to Nginx https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/
     config: {}
     # -- Annotations to be added to the controller config configuration configmap.
@@ -105,8 +104,6 @@ nginx-ingress:
         http: 80
         # -- 'hostPort' https port
         https: 443
-        # -- 'hostPort' postgresql port
-        postgres: 5432
     # NetworkPolicy for controller component.
     networkPolicy:
       # -- Enable 'networkPolicy' or not
@@ -502,11 +499,9 @@ nginx-ingress:
       ports:
         http: 80
         https: 443
-        postgres: 5432
       targetPorts:
         http: http
         https: https
-        postgres: 5432
       type: LoadBalancer
       ## type: NodePort
       ## nodePorts:
@@ -1002,8 +997,9 @@ nginx-ingress:
   # -- TCP service key-value pairs
   ## Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md
   ##
-  tcp: {}
-  #  8080: "default/example-tcp-svc:9000"
+  tcp:
+    5430: "common-database/common-database-cluster-r:5432"
+    5431: "common-database/common-database-cluster-rw:5432"
 
   # -- UDP service key-value pairs
   ## Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/exposing-tcp-udp-services.md
