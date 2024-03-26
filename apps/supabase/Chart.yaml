@@ -6,6 +6,6 @@ type: application
 version: 1.0.0
 dependencies:
   - name: supabase
-    version: 0.1.0
+    version: 1.0.1
     repository: oci://hub.k8s.nabi.kim
     condition: supabase.enabled
