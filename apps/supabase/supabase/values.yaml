@@ -6,25 +6,6 @@ supabase:
       tag: "15.1.0.147"
     environment:
       POSTGRES_HOST_AUTH_METHOD: md5
-    ingress:
-      enabled: true
-      className: "nginx"
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /
-        cert-manager.io/cluster-issuer: "letsencrypt-prod"
-        kubernetes.io/tls-acme: "true"
-      tls:
-        - secretName: db.supabase.nabi.kim
-          hosts:
-            - db.supabase.nabi.kim
-      hosts:
-        - host: db.supabase.nabi.kim
-          paths:
-            - path: /
-              pathType: Prefix
-              backend:
-                serviceName: database
-                servicePort: 5432
     persistence:
       enabled: true
       storageClassName: ""
@@ -37,25 +18,6 @@ supabase:
   studio:
     image:
       tag: "20240301-0942bfe"
-    ingress:
-      enabled: true
-      className: "nginx"
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /
-        cert-manager.io/cluster-issuer: "letsencrypt-prod"
-        kubernetes.io/tls-acme: "true"
-      tls:
-        - secretName: app.supabase.nabi.kim
-          hosts:
-            - app.supabase.nabi.kim
-      hosts:
-        - host: app.supabase.nabi.kim
-          paths:
-            - path: /
-              pathType: Prefix
-              backend:
-                serviceName: api
-                servicePort: 3000
 
   auth:
     image:
@@ -87,10 +49,10 @@ supabase:
       GOTRUE_SMTP_SENDER_NAME: "Verify Account"
       GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
       GOTRUE_SMS_AUTOCONFIRM: "false"
-      GOTRUE_MAILER_URLPATHS_INVITE: "https://api.supabase.nabi.kim/auth/v1/verify"
-      GOTRUE_MAILER_URLPATHS_CONFIRMATION: "https://api.supabase.nabi.kim/auth/v1/verify"
-      GOTRUE_MAILER_URLPATHS_RECOVERY: "https://api.supabase.nabi.kim/auth/v1/verify"
-      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: "https://api.supabase.nabi.kim/auth/v1/verify"
+      GOTRUE_MAILER_URLPATHS_INVITE: "https://app.supabase.nabi.kim/auth/v1/verify"
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: "https://app.supabase.nabi.kim/auth/v1/verify"
+      GOTRUE_MAILER_URLPATHS_RECOVERY: "https://app.supabase.nabi.kim/auth/v1/verify"
+      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: "https://app.supabase.nabi.kim/auth/v1/verify"
 
   rest:
     image:
@@ -139,11 +101,11 @@ supabase:
         cert-manager.io/cluster-issuer: "letsencrypt-prod"
         kubernetes.io/tls-acme: "true"
       tls:
-        - secretName: api.supabase.nabi.kim
+        - secretName: app.supabase.nabi.kim
           hosts:
-            - api.supabase.nabi.kim
+            - app.supabase.nabi.kim
       hosts:
-        - host: api.supabase.nabi.kim
+        - host: app.supabase.nabi.kim
           paths:
             - path: /
               pathType: Prefix
