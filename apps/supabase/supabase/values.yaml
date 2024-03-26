@@ -81,10 +81,10 @@ supabase:
       GOTRUE_MAILER_AUTOCONFIRM: "true"
       # GOTRUE_MAILER_SECURE_EMAIL_CHANGE_ENABLED: true
       # GOTRUE_SMTP_MAX_FREQUENCY: 1s
-      GOTRUE_SMTP_ADMIN_EMAIL: "hello@supabase.nabi.kim"
+      GOTRUE_SMTP_ADMIN_EMAIL: "verify-account@supabase.nabi.kim"
       GOTRUE_SMTP_HOST: "smtp.mail.me.com"
       GOTRUE_SMTP_PORT: "587"
-      GOTRUE_SMTP_SENDER_NAME: "verify-account@supabase.nabi.kim"
+      GOTRUE_SMTP_SENDER_NAME: "Verify Account"
       GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
       GOTRUE_SMS_AUTOCONFIRM: "false"
       GOTRUE_MAILER_URLPATHS_INVITE: "https://api.supabase.nabi.kim/auth/v1/verify"
