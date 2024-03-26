@@ -87,10 +87,10 @@ supabase:
       GOTRUE_SMTP_SENDER_NAME: "verify-account@supabase.nabi.kim"
       GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
       GOTRUE_SMS_AUTOCONFIRM: "false"
-      GOTRUE_MAILER_URLPATHS_INVITE: "/auth/v1/verify"
-      GOTRUE_MAILER_URLPATHS_CONFIRMATION: "/auth/v1/verify"
-      GOTRUE_MAILER_URLPATHS_RECOVERY: "/auth/v1/verify"
-      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: "/auth/v1/verify"
+      GOTRUE_MAILER_URLPATHS_INVITE: "https://api.supabase.nabi.kim/auth/v1/verify"
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: "https://api.supabase.nabi.kim/auth/v1/verify"
+      GOTRUE_MAILER_URLPATHS_RECOVERY: "https://api.supabase.nabi.kim/auth/v1/verify"
+      GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: "https://api.supabase.nabi.kim/auth/v1/verify"
 
   rest:
     image:
