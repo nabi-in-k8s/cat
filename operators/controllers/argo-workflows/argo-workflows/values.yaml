@@ -30,7 +30,7 @@ argo-workflows:
 
     sso:
       enabled: true
-      issuer: https://argocd.k8s.nabi.kim/api/dex
+      issuer: https://argo-cd.k8s.nabi.kim/api/dex
       sessionExpiry: 24h
       clientId:
         name: argo-workflows-sso
