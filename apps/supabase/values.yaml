@@ -882,7 +882,7 @@ analytics:
     DB_SCHEMA: _analytics
     LOGFLARE_SINGLE_TENANT: "true"
     LOGFLARE_SUPABASE_MODE: "true"
-    FEATURE_FLAG_OVERRIDE: multibackend=true
+    # FEATURE_FLAG_OVERRIDE: multibackend=true
   # Enable Big Query backend for analytics
   bigQuery:
     enabled: false
