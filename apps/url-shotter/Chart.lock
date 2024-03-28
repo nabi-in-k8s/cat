@@ -1,0 +1,6 @@
+dependencies:
+- name: supabase
+  repository: oci://hub.k8s.nabi.kim
+  version: 1.1.0
+digest: sha256:ca4658fd331ff366d768fac7651338c33fd7af09ccfbc5d62348999468264424
+generated: "2024-03-28T21:59:22.13781+09:00"
