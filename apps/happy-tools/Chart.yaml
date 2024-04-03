@@ -1,0 +1,12 @@
+apiVersion: v2
+name: happy-tools
+description: database for happy-tools
+
+type: application
+version: 1.0.0
+dependencies:
+  - name: supabase
+    alias: happy-tools
+    version: 1.1.1
+    repository: oci://hub.k8s.nabi.kim
+    condition: url-shotter.enabled
