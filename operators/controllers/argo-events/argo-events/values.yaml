@@ -1,5 +1,0 @@
-argo-events:
-  enabled: true
-
-  webhook:
-    enabled: true

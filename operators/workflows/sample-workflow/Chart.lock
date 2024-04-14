@@ -1,6 +1,0 @@
-dependencies:
-- name: webhook-workflow
-  repository: oci://hub.k8s.nabi.kim
-  version: 1.0.5
-digest: sha256:c011b7af90030f2acc402d3ef05fb6eaec858d74aed920bd8caf3b063a55dc62
-generated: "2023-12-21T17:24:49.320592+09:00"

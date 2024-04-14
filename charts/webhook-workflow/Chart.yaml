@@ -1,6 +1,0 @@
-apiVersion: v2
-name: webhook-workflow
-description: A Helm chart for workflow triggered by webhook.
-
-type: application
-version: 1.0.5
