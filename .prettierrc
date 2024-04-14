@@ -1,0 +1,13 @@
+{
+  "semi": true,
+  "printWidth": 80,
+  "plugins": ["prettier-plugin-packagejson"],
+  "overrides": [
+    {
+      "files": "*.yaml",
+      "options": {
+        "bracketSpacing": false
+      }
+    }
+  ]
+}
