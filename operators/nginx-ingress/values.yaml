@@ -1,0 +1,12 @@
+ingress:
+  enabled: true
+
+  nameOverride: "ingress"
+  namespaceOverride: "ingress"
+
+  controller:
+    publishService:
+      enabled: true
+
+  tcp: {}
+  udp: {}

@@ -4,8 +4,8 @@
 
 ## TODO
 
-- [ ] nginx-ingress
-- [ ] cert-manager
+- [x] nginx-ingress
+- [x] cert-manager
 - [ ] argo-cd
 - [ ] Prometheus / Grafana
 - [ ] Pruntl VPN
