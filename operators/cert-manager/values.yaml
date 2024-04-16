@@ -7,8 +7,6 @@ clusterIssuer:
 
   staging:
     acmeEmail: server+staging@nabi.kim
-    enabled: true
 
   prod:
     acmeEmail: server+production@nabi.kim
-    enabled: true
