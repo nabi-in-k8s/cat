@@ -1,0 +1,21 @@
+argo:
+  enabled: true
+
+  global:
+    domain: argo-cd.k8s.nabi.kim
+
+  configs:
+    params:
+      server.insecure: true
+    dex.config: {}
+
+  server:
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      annotations:
+        kubernetes.io/tls-acme: "true"
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      tls: true

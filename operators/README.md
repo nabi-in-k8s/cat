@@ -6,7 +6,7 @@
 
 - [x] nginx-ingress
 - [x] cert-manager
-- [ ] argo-cd
+- [x] argo-cd
 - [ ] Prometheus / Grafana
 - [ ] Pruntl VPN
 - [ ] TeamCity Professional (CI-CD)
