@@ -21,7 +21,7 @@ spec:
               value: {{ printf "http://%s:%d" (include "teamcity.fullname" .) (int .Values.server.service.port) }}
           {{- if .Values.agent.pvc.enabled }}
           securityContext:
-            runAsUser: 0
+            runAsUser: {{ .Values.agent.securityContext.runAsUser }}
           volumeMounts:
             - name: agent-data
               mountPath: /data/teamcity_agent/conf
