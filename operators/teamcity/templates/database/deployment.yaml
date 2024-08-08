@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "teamcity.database.fullname" . }}-deployment
   namespace: {{ template "teamcity.namespace" . }}
-  label: {{ include "teamcity.database.label" . | nindent 4 }}
+  labels: {{ include "teamcity.database.label" . | nindent 4 }}
 spec:
   replicas: {{ .Values.database.replicas }}
   selector:
@@ -45,5 +45,5 @@ spec:
       volumes:
         - name: postgres-data
           persistentVolumeClaim:
-            claimName: {{ .Values.database.pvc.name }}
+            claimName: {{ include "teamcity.database.fullname" . }}-pvc
       {{- end }}

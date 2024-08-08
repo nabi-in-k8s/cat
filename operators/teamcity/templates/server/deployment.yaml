@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "teamcity.server.fullname" . }}-deployment
@@ -29,5 +29,5 @@ spec:
       volumes:
         - name: server-data
           persistentVolumeClaim:
-            claimName: {{ .Values.server.pvc.name }}
+            claimName: {{ include "teamcity.server.fullname" . }}-pvc
       {{- end -}}
