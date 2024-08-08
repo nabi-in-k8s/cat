@@ -5,9 +5,9 @@ metadata:
   name: {{ include "teamcity.fullname" . }}-rolebinding
   namespace: {{ template "teamcity.namespace" . }}
 {{- if .Values.serviceAccount.create }}
-  subjects:
-    - kind: ServiceAccount
-      name: {{ template "teamcity.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "teamcity.fullname" . }}-serviceaccount
 {{- end }}
 roleRef:
   kind: Role
