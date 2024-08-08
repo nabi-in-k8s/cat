@@ -5,7 +5,7 @@ rbac:
   create: true
 
 database:
-  replicas: 3
+  replicas: 1
   pvc:
     enabled: true
     storageSize: 5Gi
@@ -18,7 +18,7 @@ database:
             values:
             - nabiserver
 server:
-  replicas: 2
+  replicas: 1
   ingress:
     enabled: true
     annotations:
