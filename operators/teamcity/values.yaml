@@ -1,0 +1,99 @@
+teamcity:
+  version: 2024.07.1
+
+  override:
+    name: ""
+    fullname: ""
+    namespace: ""
+
+serviceAccount:
+  create: false
+  name: teamcity-service-account
+
+rbac:
+  create: false
+  name: teamcity-rbac
+  role:
+    rules:
+      - apiGroups:
+          - ""
+        resources:
+          - services
+          - endpoints
+          - pods
+        verbs:
+          - get
+          - watch
+          - list
+
+database:
+  replicas: 1
+
+  name: teamcity-database
+
+  image:
+    repository: postgres
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  config:
+    username: teamcity-user
+    password: teamcity-password
+    database: teamcity-database
+    secretName: teamcity-postgres-secret
+
+  service:
+    port: 5432
+
+  pvc:
+    enabled: false
+    name: teamcity-database-pvc
+    storageClass: default
+    storageSize: 1Gi
+
+server:
+  replicas: 1
+
+  name: teamcity-server
+
+  image:
+    repository: jetbrains/teamcity-server
+    pullPolicy: IfNotPresent
+
+  ingress:
+    enabled: false
+    annotations:
+      kubernetes.io/tls-acme: true
+      kubernetes.io/ingress.class: nginx
+    host: ""
+    tls:
+      enabled: false
+      secretName: ""
+
+  service:
+    annotations: {}
+    type: ClusterIP
+    port: 8111
+
+  pvc:
+    enabled: false
+    name: teamcity-server-pvc
+    storageClass: default
+    storageSize: 1Gi
+
+agent:
+  replicas: 3
+
+  name: teamcity-agent
+
+  image:
+    repository: jetbrains/teamcity-agent
+    pullPolicy: IfNotPresent
+    arch: amd64
+    sudo: true
+
+  pvc:
+    enabled: false
+    name: teamcity-agent-pvc
+    storageClass: default
+    storageSize: 1Gi

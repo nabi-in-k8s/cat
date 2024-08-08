@@ -1,0 +1,25 @@
+serviceAccount:
+  create: true
+  name: teamcity-service-account
+
+rbac:
+  create: true
+
+database:
+  replicas: 3
+
+server:
+  replicas: 2
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    host: teamcity.k8s.nabi.kim
+    tls:
+      enabled: true
+      secretName: teamcity-tls
+
+agent:
+  replicas: 3
