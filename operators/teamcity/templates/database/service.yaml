@@ -1,0 +1,18 @@
+{{ if .Values.database.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "teamcity.database.fullname" . }}-svc
+  namespace: {{ template "teamcity.namespace" . }}
+  labels: {{ include "teamcity.database.label" . | nindent 4 }}
+  {{- if .Values.database.service.annotations }}
+  annotations:
+    {{ toYaml .Values.database.service.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  selector: {{ include "teamcity.database.label" . | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.database.service.port }}
+      targetPort: {{ .Values.database.service.port }}
+{{ end }}

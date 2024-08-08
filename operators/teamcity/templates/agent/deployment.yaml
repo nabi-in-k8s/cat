@@ -1,0 +1,49 @@
+{{ if .Values.agent.enabled }}
+{{- range $index := until (int .Values.agent.replicas) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "teamcity.agent.fullname" $ }}-{{ $index | toString }}-deployment
+  namespace: {{ template "teamcity.namespace" $ }}
+  labels:
+    agent-index: {{ $index | toString | quote }}
+    {{- include "teamcity.agent.label" $ | nindent 4 }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      agent-index: {{ $index | toString | quote }}
+      {{- include "teamcity.agent.label" $ | nindent 6 }}
+  template:
+    metadata:
+      labels: 
+        agent-index: {{ $index | toString | quote }}
+        {{- include "teamcity.agent.label" $ | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "teamcity.agent.fullname" $ }}
+          image: {{ printf "%s:%s" $.Values.agent.image.repository (include "teamcity.agent.imageTag" $) }}
+          imagePullPolicy: {{ $.Values.agent.image.pullPolicy }}
+          env:
+            - name: SERVER_URL
+              value: {{ printf "http://%s-svc:%d" (include "teamcity.server.fullname" $) (int $.Values.server.service.port) }}
+            - name: DOCKER_IN_DOCKER
+              value: "true"
+          {{- if $.Values.agent.pvc.enabled }}
+          securityContext:
+            runAsUser: {{ $.Values.agent.securityContext.runAsUser }}
+          volumeMounts:
+            - name: agent-data
+              subPath: {{ printf "agent-%d" $index }}
+              mountPath: /data/teamcity_agent/conf
+          {{- end }}
+      {{- if $.Values.agent.pvc.enabled }}
+      volumes:
+        - name: agent-data
+          persistentVolumeClaim:
+            claimName: {{ include "teamcity.agent.fullname" $ }}-pvc
+      {{- end }}
+---
+{{ end -}}
+{{ end }}

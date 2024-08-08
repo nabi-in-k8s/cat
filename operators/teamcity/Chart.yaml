@@ -1,0 +1,8 @@
+apiVersion: v2
+
+name: teamcity
+description: TeamCity For CI/CD on Kubernetes
+
+version: 0.1.0
+
+type: application

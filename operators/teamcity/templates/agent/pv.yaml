@@ -1,0 +1,19 @@
+{{ if .Values.agent.enabled }}
+{{- if .Values.agent.pvc.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "teamcity.agent.fullname" . }}-pv
+  namespace: {{ template "teamcity.namespace" . }}
+spec:
+  capacity:
+    storage: {{ .Values.agent.pvc.storageSize }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ include "teamcity.fullname" . }}-storageclass
+  local:
+    path: {{ .Values.agent.pvc.path }}
+  nodeAffinity: {{ .Values.agent.pvc.nodeAffinity | toYaml | nindent 4 }}
+{{- end }}
+{{ end }}

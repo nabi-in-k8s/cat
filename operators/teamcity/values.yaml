@@ -1,0 +1,110 @@
+teamcity:
+  version: 2024.07.1
+
+  override:
+    name: ""
+    fullname: ""
+    namespace: ""
+
+serviceAccount:
+  create: false
+
+rbac:
+  create: false
+  role:
+    rules:
+      - apiGroups:
+          - ""
+        resources:
+          - services
+          - endpoints
+          - pods
+        verbs:
+          - get
+          - watch
+          - list
+
+database:
+  enabled: false
+
+  replicas: 1
+
+  image:
+    repository: postgres
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  auth:
+    # username: teamcity-user
+    # password: teamcity-password
+    # database: teamcity-database
+    secretName: teamcity-postgres-secret
+  
+  securityContext:
+    runAsUser: 1000
+
+  service:
+    annotations: {}
+    port: 5432
+
+  pvc:
+    enabled: false
+    storageSize: 1Gi
+    path: /data/teamcity/postgres
+    nodeAffinity: {}
+
+server:
+  enabled: false
+
+  replicas: 1
+
+  image:
+    repository: jetbrains/teamcity-server
+    pullPolicy: IfNotPresent
+
+  ingress:
+    enabled: false
+    annotations:
+      kubernetes.io/tls-acme: "true"
+      kubernetes.io/ingress.class: nginx
+    host: ""
+    tls:
+      enabled: false
+      secretName: ""
+  
+  securityContext:
+    runAsUser: 1000
+
+  service:
+    annotations: {}
+    port: 8111
+
+  pvc:
+    enabled: false
+    storageSize: 1Gi
+    path: /data/teamcity/server
+    nodeAffinity: {}
+
+agent:
+  enabled: false
+
+  replicas: 3
+
+  image:
+    repository: jetbrains/teamcity-agent
+    pullPolicy: IfNotPresent
+    arch: amd64
+    sudo: true
+  
+  securityContext:
+    runAsUser: 1000
+
+  service:
+    annotations: {}
+    port: 9090
+
+  pvc:
+    enabled: false
+    storageSize: 1Gi
+    path: /data/teamcity/agent
+    nodeAffinity: {}
