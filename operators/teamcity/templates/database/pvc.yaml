@@ -2,8 +2,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.database.pvc.name }}
-  namespace: {{ include "teamcity.namespace" . }}
+  name: {{ include "teamcity.database.fullname" . }}-pvc
+  namespace: {{ template "teamcity.namespace" . }}
+  labels: {{ include "teamcity.database.label" . | nindent 4 }}
 spec:
   storageClassName: {{ .Values.database.pvc.storageClass }}
   accessModes:

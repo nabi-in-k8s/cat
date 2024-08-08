@@ -8,11 +8,9 @@ teamcity:
 
 serviceAccount:
   create: false
-  name: teamcity-service-account
 
 rbac:
   create: false
-  name: teamcity-rbac
   role:
     rules:
       - apiGroups:
@@ -28,8 +26,6 @@ rbac:
 
 database:
   replicas: 1
-
-  name: teamcity-database
 
   image:
     repository: postgres
@@ -53,8 +49,6 @@ database:
 
 server:
   replicas: 1
-
-  name: teamcity-server
 
   image:
     repository: jetbrains/teamcity-server
@@ -83,8 +77,6 @@ server:
 
 agent:
   replicas: 3
-
-  name: teamcity-agent
 
   image:
     repository: jetbrains/teamcity-agent

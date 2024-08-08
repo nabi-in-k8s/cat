@@ -1,17 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.database.name }}
-  namespace: {{ include "teamcity.namespace" . }}
+  name: {{ include "teamcity.database.fullname" . }}-deployment
+  namespace: {{ template "teamcity.namespace" . }}
+  label: {{ include "teamcity.database.label" . | nindent 4 }}
 spec:
   replicas: {{ .Values.database.replicas }}
   selector:
-    matchLabels:
-      app: {{ .Values.database.name }}
+    matchLabels: {{ include "teamcity.database.label" . | nindent 6 }}
   template:
     metadata:
-      labels:
-        app: {{ .Values.database.name }}
+      labels: {{ include "teamcity.database.label" . | nindent 8 }}
     spec:
       containers:
         - name: postgres

@@ -1,33 +1,19 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: {{ printf "%s-agent" (include "teamcity.fullname" .) }}
-  labels:
-    app: {{ printf "%s-agent" (include "teamcity.fullname" .) }}
-    version: {{ template "teamcity.agent.imageTag" . }}
-    chart: {{ template "teamcity.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+  name: {{ include "teamcity.agent.fullname" . }}-deployment
+  namespace: {{ template "teamcity.namespace" . }}
+  labels: {{ include "teamcity.agent.label" . | nindent 4 }}
 spec:
   replicas: {{ .Values.agent.replicas }}
   selector:
-    matchLabels:
-      app: {{ printf "%s-agent" (include "teamcity.fullname" .) }}
-      version: {{ template "teamcity.agent.imageTag" . }}
-      chart: {{ template "teamcity.chart" . }}
-      release: {{ .Release.Name }}
-      heritage: {{ .Release.Service }}
+    matchLabels: {{ include "teamcity.agent.label" . | nindent 6 }}
   template:
     metadata:
-      labels:
-        app: {{ printf "%s-agent" (include "teamcity.fullname" .) }}
-        version: {{ template "teamcity.agent.imageTag" . }}
-        chart: {{ template "teamcity.chart" . }}
-        release: {{ .Release.Name }}
-        heritage: {{ .Release.Service }}
+      labels: {{ include "teamcity.agent.label" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ template "teamcity.fullname" . }}-agent
+        - name: {{ include "teamcity.agent.fullname" . }}
           image: {{ printf "%s:%s" .Values.agent.image.repository (include "teamcity.agent.imageTag" .) }}
           imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
           env:

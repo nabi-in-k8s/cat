@@ -39,3 +39,38 @@
 {{ $version }}
 {{- end -}}
 {{- end -}}
+
+{{- define "teamcity.label" -}}
+chart: {{ template "teamcity.chart" . }}
+release: {{ .Release.Name }}
+heritage: {{ .Release.Service }}
+{{- end -}}
+
+{{- define "teamcity.server.fullname" -}}
+{{ printf "%s-server" (include "teamcity.fullname" .) }}
+{{- end -}}
+
+{{- define "teamcity.server.label" -}}
+{{ include "teamcity.label" . }}
+app: {{ include "teamcity.server.fullname" . }}
+version: {{ template "teamcity.server.imageTag" . }}
+{{- end -}}
+
+{{- define "teamcity.agent.fullname" -}}
+{{ printf "%s-agent" (include "teamcity.fullname" .) }}
+{{- end -}}
+
+{{- define "teamcity.agent.label" -}}
+{{ include "teamcity.label" . }}
+app: {{ include "teamcity.agent.fullname" . }}
+version: {{ template "teamcity.agent.imageTag" . }}
+{{- end -}}
+
+{{- define "teamcity.database.fullname" -}}
+{{ printf "%s-database" (include "teamcity.fullname" .) }}
+{{- end -}}
+
+{{- define "teamcity.database.label" -}}
+{{ include "teamcity.label" . }}
+app: {{ include "teamcity.database.fullname" . }}
+{{- end -}}
