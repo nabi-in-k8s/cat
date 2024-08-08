@@ -1,0 +1,38 @@
+enabled: false
+
+nameOverride: ""
+fullnameOverride: ""
+namespaceOverride: ""
+
+replicas: 1
+
+labels: {}
+
+deployment:
+  create: false
+
+image:
+  registry: ""
+  repository: ""
+  tag: ""
+
+service:
+  create: false
+  name: ""
+  annotations: {}
+  type: ClusterIP
+  ports:
+    - name: server
+      port: 3000
+      targetPort: 3000
+
+ingress:
+  create: false
+  annotations: {}
+  hosts: []
+  tls: []
+  path: /
+  pathType: Prefix
+  portName: server
+
+envs: {}
