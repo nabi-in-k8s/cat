@@ -1,0 +1,20 @@
+{{- if .Values.server.pvc.enabled -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.server.pvc.name }}
+  namespace: {{ include "teamcity.namespace" . }}
+  labels:
+    app: {{ template "teamcity.name" . }}
+    version: {{ template "teamcity.server.imageTag" . }}
+    chart: {{ template "teamcity.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  storageClassName: {{ default .Values.server.pvc.storageClass  "default" }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.server.pvc.storageSize }}
+{{- end }}

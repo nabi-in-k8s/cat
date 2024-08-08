@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "teamcity.fullname" . }}-agent
+  labels:
+    app: {{ template "teamcity.name" . }}-agent
+    version: {{ template "teamcity.agent.imageTag" . }}
+    chart: {{ template "teamcity.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.agent.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "teamcity.name" . }}-agent
+      version: {{ template "teamcity.agent.imageTag" . }}
+      chart: {{ template "teamcity.chart" . }}
+      release: {{ .Release.Name }}
+      heritage: {{ .Release.Service }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "teamcity.name" . }}-agent
+        version: {{ template "teamcity.agent.imageTag" . }}
+        chart: {{ template "teamcity.chart" . }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      {{- if .Values.agent.pvc.enabled -}}
+      volumes:
+        - name: agent-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.agent.pvc.name }}
+      {{- end -}}
+      containers:
+        - name: {{ template "teamcity.fullname" . }}-agent
+          image: {{ printf "%s:%s" .Values.agent.image.repository template "teamcity.agent.imageTag" }}
+          imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+          env:
+            - name: SERVER_URL
+              value: {{ printf "http://%s:%d" (include "teamcity.fullname" .) .Values.server.service.port }}
+          {{- if .Values.agent.pvc.enabled -}}
+          volumeMounts:
+            - name:  agent-data
+              mountPath: /data/teamcity_agent/conf
+          {{- end -}}

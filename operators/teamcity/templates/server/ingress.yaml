@@ -1,0 +1,34 @@
+{{- if .Values.server.ingress.enabled -}}
+{{- $serviceName := include "teamcity.fullname" . -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $serviceName }}
+  labels:
+    app: {{ template "teamcity.name" . }}
+    version: {{ template "teamcity.server.imageTag" . }}
+    chart: {{ template "teamcity.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  {{- if .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    - host: {{ .Values.server.ingress.host }}
+      http:
+        paths: /
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ $serviceName }}
+              port:
+                number: 8111
+  {{- if .Values.server.ingress.tls.enabled -}}
+  tls:
+    - hosts:
+        - {{ .Values.server.ingress.host }}
+      secretName: {{ .Values.server.ingress.tls.secretName }}
+  {{- end -}}
+{{- end -}}

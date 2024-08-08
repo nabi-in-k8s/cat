@@ -1,0 +1,14 @@
+{{- if .Values.database.pvc.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.database.pvc.name }}
+  namespace: {{ include "teamcity.namespace" . }}
+spec:
+  storageClassName: {{ .Values.database.pvc.storageClass }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.database.pvc.storageSize }}
+{{- end -}}

@@ -1,0 +1,45 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "teamcity.fullname" . }}
+  labels:
+    app: {{ template "teamcity.name" . }}
+    version: {{ template "teamcity.server.imageTag" }}
+    chart: {{ template "teamcity.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.server.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "teamcity.name" . }}
+      version: {{ template "teamcity.agent.imageTag" . }}
+      chart: {{ template "teamcity.chart" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "teamcity.name" . }}
+        version: {{ template "teamcity.agent.imageTag" . }}
+        chart: {{ template "teamcity.chart" . }}
+        release: {{ .Release.Name }}
+    spec:
+      {{- if .Values.server.pvc.enabled -}}
+      volumes:
+        - name: server-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.server.pvc.name }}
+      {{- end -}}
+      containers:
+        - name: {{ template "teamcity.fullname" . }}
+          image: {{ printf "%s:%s" .Values.server.image.repository template "teamcity.server.imageTag" }}
+          imagePullPolicy: {{ .Values.server.image.pullPolicy }}
+          {{- if .Values.server.pvc.enabled -}}
+          volumeMounts:
+            - name:  server-data
+              mountPath: /data/teamcity_server/datadir
+          {{- end -}}
+          ports:
+            - name: {{ template "teamcity.name" . }}-http
+              containerPort: {{ .Values.server.service.port }}
+              protocol: TCP
