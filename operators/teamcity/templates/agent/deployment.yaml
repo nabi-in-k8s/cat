@@ -26,6 +26,8 @@ spec:
           env:
             - name: SERVER_URL
               value: {{ printf "http://%s-svc:%d" (include "teamcity.server.fullname" $) (int $.Values.server.service.port) }}
+            - name: DOCKER_IN_DOCKER
+              value: "true"
           {{- if $.Values.agent.pvc.enabled }}
           securityContext:
             runAsUser: {{ $.Values.agent.securityContext.runAsUser }}
