@@ -37,6 +37,8 @@ spec:
           ports:
             - containerPort: {{ .Values.database.service.port }}
           {{- if .Values.database.pvc.enabled }}
+          securityContext:
+            runAsUser: 0
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data

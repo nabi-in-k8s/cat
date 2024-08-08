@@ -17,6 +17,8 @@ spec:
           image: {{ printf "%s:%s" .Values.server.image.repository (include "teamcity.server.imageTag" .) }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           {{- if .Values.server.pvc.enabled }}
+          securityContext:
+            runAsUser: 0
           volumeMounts:
             - name:  server-data
               mountPath: /data/teamcity_server/datadir
