@@ -10,7 +10,7 @@ metadata:
     release: {{ .Release.Name }}
   {{- if .Values.server.service.annotations }}
   annotations:
-    {{ toYaml .Values.server.service.annotations | indent 4 }}
+    {{ toYaml .Values.server.service.annotations | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.server.service.type }}

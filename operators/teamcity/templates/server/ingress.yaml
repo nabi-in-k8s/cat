@@ -1,4 +1,4 @@
-{{- if .Values.server.ingress.enabled -}}
+{{ if .Values.server.ingress.enabled }}
 {{- $serviceName := include "teamcity.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -31,4 +31,4 @@ spec:
         - {{ .Values.server.ingress.host }}
       secretName: {{ .Values.server.ingress.tls.secretName }}
   {{- end -}}
-{{- end -}}
+{{ end }}
