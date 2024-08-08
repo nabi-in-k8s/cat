@@ -71,7 +71,6 @@ server:
 
   pvc:
     enabled: false
-    name: teamcity-server-pvc
     storageClass: default
     storageSize: 1Gi
 
@@ -86,6 +85,5 @@ agent:
 
   pvc:
     enabled: false
-    name: teamcity-agent-pvc
     storageClass: default
     storageSize: 1Gi
