@@ -1,6 +1,5 @@
 serviceAccount:
   create: true
-  name: teamcity-service-account
 
 rbac:
   create: true
@@ -20,6 +19,12 @@ server:
     tls:
       enabled: true
       secretName: teamcity-tls
+  pvc:
+    enabled: true
+    storageSize: 20Gi
 
 agent:
   replicas: 3
+  pvc:
+    enabled: true
+    storageSize: 20Gi
