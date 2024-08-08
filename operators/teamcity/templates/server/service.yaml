@@ -9,13 +9,8 @@ metadata:
     {{ toYaml .Values.server.service.annotations | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ .Values.server.service.type }}
   ports:
     - name: {{ template "teamcity.name" . }}-http
       port: {{ .Values.server.service.port }}
       protocol: TCP
-  selector:
-    app: {{ template "teamcity.name" . }}
-    version: {{ template "teamcity.agent.imageTag" . }}
-    chart: {{ template "teamcity.chart" . }}
-    release: {{ .Release.Name }}
+  selector: {{ include "teamcity.server.label" . | nindent 4 }}

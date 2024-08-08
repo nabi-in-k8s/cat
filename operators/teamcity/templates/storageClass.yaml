@@ -26,7 +26,15 @@ spec:
   nodeAffinity:
     required:
       nodeSelectorTerms:
-        - matchLabels: {{ include "teamcity.server.label" . | nindent 12 }}
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - nabiserver
+        - key: app
+          operator: In
+          values:
+          - {{ include "teamcity.server.fullname" . }}
 {{- end }}
 ---
 {{- if .Values.agent.pvc.enabled }}
@@ -47,7 +55,15 @@ spec:
   nodeAffinity:
     required:
       nodeSelectorTerms:
-        - matchLabels: {{ include "teamcity.agent.label" . | nindent 12 }}
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - nabiserver
+        - key: app
+          operator: In
+          values:
+          - {{ include "teamcity.agent.fullname" . }}
 {{- end }}
 ---
 {{- if .Values.database.pvc.enabled }}
@@ -68,5 +84,13 @@ spec:
   nodeAffinity:
     required:
       nodeSelectorTerms:
-        - matchLabels: {{ include "teamcity.database.label" . | nindent 12 }}
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - nabiserver
+        - key: app
+          operator: In
+          values:
+          - {{ include "teamcity.database.fullname" . }}
 {{- end }}

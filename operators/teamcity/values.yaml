@@ -39,6 +39,7 @@ database:
     secretName: teamcity-postgres-secret
 
   service:
+    annotations: {}
     port: 5432
 
   pvc:
@@ -65,7 +66,6 @@ server:
 
   service:
     annotations: {}
-    type: ClusterIP
     port: 8111
 
   pvc:
