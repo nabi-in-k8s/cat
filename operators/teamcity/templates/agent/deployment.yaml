@@ -19,14 +19,14 @@ spec:
           env:
             - name: SERVER_URL
               value: {{ printf "http://%s:%d" (include "teamcity.fullname" .) (int .Values.server.service.port) }}
-          {{- if .Values.agent.pvc.enabled -}}
+          {{- if .Values.agent.pvc.enabled }}
           volumeMounts:
-            - name:  agent-data
+            - name: agent-data
               mountPath: /data/teamcity_agent/conf
-          {{- end -}}
-      {{- if .Values.agent.pvc.enabled -}}
+          {{- end }}
+      {{- if .Values.agent.pvc.enabled }}
       volumes:
         - name: agent-data
           persistentVolumeClaim:
             claimName: {{ include "teamcity.agent.fullname" . }}-pvc
-      {{- end -}}
+      {{- end }}
