@@ -1,0 +1,14 @@
+apiVersion: v2
+
+name: harbor
+description: Docker Image Hub Operator for Kubernetes
+
+version: 0.1.0
+
+type: application
+
+dependencies:
+  - name: harbor
+    version: 1.15.0
+    repository: https://helm.goharbor.io
+    condition: harbor.enabled

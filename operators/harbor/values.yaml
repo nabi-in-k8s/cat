@@ -1,0 +1,96 @@
+harbor:
+  enabled: true
+
+  expose:
+    type: ingress
+    tls:
+      enabled: true
+      certSource: secret
+      secret:
+        secretName: harbor-tls
+    ingress:
+      hosts:
+        core: harbor.k8s.nabi.kim
+      controller: default
+      annotations:
+        kubernetes.io/tls-acme: "true"
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+
+  externalURL: https://harbor.k8s.nabi.kim
+
+  persistence:
+    enabled: true
+
+    resourcePolicy: "keep"
+    persistentVolumeClaim:
+      registry:
+        accessMode: ReadWriteOnce
+        size: 50Gi
+        annotations: {}
+
+      jobservice:
+        jobLog:
+          accessMode: ReadWriteOnce
+          size: 1Gi
+          annotations: {}
+
+      database:
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+
+      redis:
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        annotations: {}
+
+      trivy:
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        annotations: {}
+
+    imageChartStorage:
+      disableredirect: false
+
+      type: filesystem
+      filesystem:
+        rootdirectory: /storage
+
+  metrics:
+    enabled: true
+    core:
+      path: /metrics
+      port: 8001
+    registry:
+      path: /metrics
+      port: 8001
+    jobservice:
+      path: /metrics
+      port: 8001
+    exporter:
+      path: /metrics
+      port: 8001
+
+    serviceMonitor:
+      enabled: false
+      additionalLabels: {}
+      interval: ""
+      metricRelabelings: []
+      relabelings: []
+
+  cache:
+    enabled: true
+    expireHours: 24
+
+  containerSecurityContext:
+    privileged: false
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    runAsNonRoot: true
+    capabilities:
+      drop:
+        - ALL

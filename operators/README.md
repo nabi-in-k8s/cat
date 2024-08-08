@@ -8,5 +8,5 @@
 - [x] cert-manager
 - [x] argo-cd
 - [x] Prometheus / Grafana
-- [ ] OCI Image Hub
+- [x] OCI Image Hub
 - [ ] TeamCity Professional (CI-CD)
