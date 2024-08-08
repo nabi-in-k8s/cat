@@ -93,6 +93,10 @@ agent:
   securityContext:
     runAsUser: 1000
 
+  service:
+    annotations: {}
+    port: 9090
+
   pvc:
     enabled: false
     storageSize: 1Gi

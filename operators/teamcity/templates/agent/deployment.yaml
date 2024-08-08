@@ -1,34 +1,44 @@
+{{- range $index := until (int .Values.agent.replicas) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "teamcity.agent.fullname" . }}-deployment
-  namespace: {{ template "teamcity.namespace" . }}
-  labels: {{ include "teamcity.agent.label" . | nindent 4 }}
+  name: {{ include "teamcity.agent.fullname" $ }}-{{ $index | toString }}-deployment
+  namespace: {{ template "teamcity.namespace" $ }}
+  labels:
+    agent-index: {{ $index | toString | quote }}
+    {{- include "teamcity.agent.label" $ | nindent 4 }}
 spec:
-  replicas: {{ .Values.agent.replicas }}
+  replicas: 1
   selector:
-    matchLabels: {{ include "teamcity.agent.label" . | nindent 6 }}
+    matchLabels:
+      agent-index: {{ $index | toString | quote }}
+      {{- include "teamcity.agent.label" $ | nindent 6 }}
   template:
     metadata:
-      labels: {{ include "teamcity.agent.label" . | nindent 8 }}
+      labels: 
+        agent-index: {{ $index | toString | quote }}
+        {{- include "teamcity.agent.label" $ | nindent 8 }}
     spec:
       containers:
-        - name: {{ include "teamcity.agent.fullname" . }}
-          image: {{ printf "%s:%s" .Values.agent.image.repository (include "teamcity.agent.imageTag" .) }}
-          imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+        - name: {{ include "teamcity.agent.fullname" $ }}
+          image: {{ printf "%s:%s" $.Values.agent.image.repository (include "teamcity.agent.imageTag" $) }}
+          imagePullPolicy: {{ $.Values.agent.image.pullPolicy }}
           env:
             - name: SERVER_URL
-              value: {{ printf "http://%s:%d" (include "teamcity.fullname" .) (int .Values.server.service.port) }}
-          {{- if .Values.agent.pvc.enabled }}
+              value: {{ printf "http://%s:%d" (include "teamcity.fullname" $) (int $.Values.server.service.port) }}
+          {{- if $.Values.agent.pvc.enabled }}
           securityContext:
-            runAsUser: {{ .Values.agent.securityContext.runAsUser }}
+            runAsUser: {{ $.Values.agent.securityContext.runAsUser }}
           volumeMounts:
             - name: agent-data
+              subPath: {{ printf "agent-%d" $index }}
               mountPath: /data/teamcity_agent/conf
           {{- end }}
-      {{- if .Values.agent.pvc.enabled }}
+      {{- if $.Values.agent.pvc.enabled }}
       volumes:
         - name: agent-data
           persistentVolumeClaim:
-            claimName: {{ include "teamcity.agent.fullname" . }}-pvc
+            claimName: {{ include "teamcity.agent.fullname" $ }}-pvc
       {{- end }}
+---
+{{ end -}}

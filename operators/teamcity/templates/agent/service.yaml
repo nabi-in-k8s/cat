@@ -1,0 +1,22 @@
+{{- range $index := until (int .Values.agent.replicas) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "teamcity.agent.fullname" $ }}-{{ $index | toString }}-svc
+  namespace: {{ template "teamcity.namespace" $ }}
+  labels:
+    agent-index: {{ $index | toString | quote }}
+    {{- include "teamcity.agent.label" $ | nindent 4 }}
+  {{- if $.Values.agent.service.annotations }}
+  annotations: {{ toYaml $.Values.agent.service.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    agent-index: {{ $index | toString | quote }}
+    {{- include "teamcity.agent.label" $ | nindent 4 }}
+  ports:
+    - protocol: TCP
+      port: {{ $.Values.agent.service.port }}
+      targetPort: {{ add $.Values.agent.service.port $index }}
+---
+{{ end -}}

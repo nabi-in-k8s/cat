@@ -36,7 +36,7 @@ spec:
   capacity:
     storage: {{ .Values.agent.pvc.storageSize }}
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ include "teamcity.fullname" . }}-storageclass
   local:
