@@ -7,6 +7,7 @@ metadata:
   labels: {{ include "teamcity.server.label" . | nindent 4 }}
 spec:
   replicas: {{ .Values.server.replicas }}
+  revisionHistoryLimit: 3
   selector:
     matchLabels: {{ include "teamcity.server.label" . | nindent 6 }}
   template:

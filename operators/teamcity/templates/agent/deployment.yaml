@@ -10,6 +10,7 @@ metadata:
     {{- include "teamcity.agent.label" $ | nindent 4 }}
 spec:
   replicas: 1
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       agent-index: {{ $index | toString | quote }}
