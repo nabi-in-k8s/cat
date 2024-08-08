@@ -39,7 +39,7 @@ database:
     # password: teamcity-password
     # database: teamcity-database
     secretName: teamcity-postgres-secret
-  
+
   securityContext:
     runAsUser: 1000
 
@@ -71,7 +71,7 @@ server:
     tls:
       enabled: false
       secretName: ""
-  
+
   securityContext:
     runAsUser: 1000
 
@@ -95,7 +95,7 @@ agent:
     pullPolicy: IfNotPresent
     arch: amd64
     sudo: true
-  
+
   securityContext:
     runAsUser: 1000
 
