@@ -3,6 +3,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: {{ include "teamcity.fullname" . }}-storageclass
+  namespace: {{ template "teamcity.namespace" . }}
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 {{- end }}
@@ -12,6 +13,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ include "teamcity.server.fullname" . }}-pv
+  namespace: {{ template "teamcity.namespace" . }}
 spec:
   capacity:
     storage: {{ .Values.server.pvc.storageSize }}
@@ -32,6 +34,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ include "teamcity.agent.fullname" . }}-pv
+  namespace: {{ template "teamcity.namespace" . }}
 spec:
   capacity:
     storage: {{ .Values.agent.pvc.storageSize }}
@@ -52,6 +55,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ include "teamcity.database.fullname" . }}-pv
+  namespace: {{ template "teamcity.namespace" . }}
 spec:
   capacity:
     storage: {{ .Values.database.pvc.storageSize }}
