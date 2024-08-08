@@ -1,3 +1,4 @@
+{{ if .Values.server.enabled }}
 {{ if .Values.server.pvc.enabled }}
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -12,4 +13,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.server.pvc.storageSize }}
+{{ end }}
 {{ end }}

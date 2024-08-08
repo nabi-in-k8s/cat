@@ -1,3 +1,4 @@
+{{ if .Values.server.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -33,3 +34,4 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "teamcity.server.fullname" . }}-pvc
       {{- end }}
+{{ end }}

@@ -1,3 +1,4 @@
+{{ if .Values.agent.enabled }}
 {{- if .Values.agent.pvc.enabled }}
 apiVersion: v1
 kind: PersistentVolume
@@ -15,3 +16,4 @@ spec:
     path: {{ .Values.agent.pvc.path }}
   nodeAffinity: {{ .Values.agent.pvc.nodeAffinity | toYaml | nindent 4 }}
 {{- end }}
+{{ end }}

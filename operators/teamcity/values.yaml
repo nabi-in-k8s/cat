@@ -25,6 +25,8 @@ rbac:
           - list
 
 database:
+  enabled: false
+
   replicas: 1
 
   image:
@@ -38,8 +40,8 @@ database:
     # database: teamcity-database
     secretName: teamcity-postgres-secret
   
-  # securityContext:
-  #   runAsUser: 0
+  securityContext:
+    runAsUser: 1000
 
   service:
     annotations: {}
@@ -52,6 +54,8 @@ database:
     nodeAffinity: {}
 
 server:
+  enabled: false
+
   replicas: 1
 
   image:
@@ -82,6 +86,8 @@ server:
     nodeAffinity: {}
 
 agent:
+  enabled: false
+
   replicas: 3
 
   image:

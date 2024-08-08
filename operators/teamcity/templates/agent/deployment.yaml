@@ -1,3 +1,4 @@
+{{ if .Values.agent.enabled }}
 {{- range $index := until (int .Values.agent.replicas) }}
 apiVersion: apps/v1
 kind: Deployment
@@ -44,3 +45,4 @@ spec:
       {{- end }}
 ---
 {{ end -}}
+{{ end }}

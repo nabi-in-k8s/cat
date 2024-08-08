@@ -5,6 +5,7 @@ rbac:
   create: true
 
 database:
+  enabled: true
   replicas: 1
   pvc:
     enabled: true
@@ -17,10 +18,9 @@ database:
             operator: In
             values:
             - nabiserver
-  securityContext:
-    runAsUser: 1000
 
 server:
+  enabled: true
   replicas: 1
   ingress:
     enabled: true
@@ -47,6 +47,7 @@ server:
             - nabiserver
 
 agent:
+  enabled: true
   replicas: 3
   pvc:
     enabled: true

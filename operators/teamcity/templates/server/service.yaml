@@ -1,3 +1,4 @@
+{{ if .Values.server.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -14,3 +15,4 @@ spec:
       port: {{ .Values.server.service.port }}
       protocol: TCP
   selector: {{ include "teamcity.server.label" . | nindent 4 }}
+{{ end }}
