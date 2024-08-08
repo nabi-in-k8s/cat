@@ -12,7 +12,6 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   storageClassName: {{ default .Values.agent.pvc.storageClass  "default" }}
-  {{- end }}
   accessModes:
     - ReadWriteOnce
   resources:

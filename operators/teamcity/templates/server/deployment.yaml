@@ -26,13 +26,13 @@ spec:
     spec:
       containers:
         - name: {{ template "teamcity.fullname" . }}
-          image: {{ printf "%s:%s" .Values.server.image.repository template "teamcity.server.imageTag" }}
+          image: {{ printf "%s:%s" .Values.server.image.repository (include "teamcity.server.imageTag" .) }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
-          {{- if .Values.server.pvc.enabled -}}
+          {{ if .Values.server.pvc.enabled -}}
           volumeMounts:
             - name:  server-data
               mountPath: /data/teamcity_server/datadir
-          {{- end -}}
+          {{ end -}}
           ports:
             - name: {{ template "teamcity.name" . }}-http
               containerPort: {{ .Values.server.service.port }}

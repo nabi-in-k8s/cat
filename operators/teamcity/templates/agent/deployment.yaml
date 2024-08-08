@@ -1,9 +1,9 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: {{ printf "%s-agent" (template "teamcity.fullname" .) }}
+  name: {{ printf "%s-agent" (include "teamcity.fullname" .) }}
   labels:
-    app: {{ template "teamcity.name" . }}-agent
+    app: {{ printf "%s-agent" (include "teamcity.fullname" .) }}
     version: {{ template "teamcity.agent.imageTag" . }}
     chart: {{ template "teamcity.chart" . }}
     release: {{ .Release.Name }}
@@ -12,7 +12,7 @@ spec:
   replicas: {{ .Values.agent.replicas }}
   selector:
     matchLabels:
-      app: {{ printf "%s-agent" (template "teamcity.fullname" .) }}
+      app: {{ printf "%s-agent" (include "teamcity.fullname" .) }}
       version: {{ template "teamcity.agent.imageTag" . }}
       chart: {{ template "teamcity.chart" . }}
       release: {{ .Release.Name }}
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ printf "%s-agent" (template "teamcity.fullname" .) }}
+        app: {{ printf "%s-agent" (include "teamcity.fullname" .) }}
         version: {{ template "teamcity.agent.imageTag" . }}
         chart: {{ template "teamcity.chart" . }}
         release: {{ .Release.Name }}
@@ -28,11 +28,11 @@ spec:
     spec:
       containers:
         - name: {{ template "teamcity.fullname" . }}-agent
-          image: {{ printf "%s:%s" .Values.agent.image.repository (template "teamcity.agent.imageTag" .) }}
+          image: {{ printf "%s:%s" .Values.agent.image.repository (include "teamcity.agent.imageTag" .) }}
           imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
           env:
             - name: SERVER_URL
-              value: {{ printf "http://%s:%d" (include "teamcity.fullname" .) .Values.server.service.port }}
+              value: {{ printf "http://%s:%d" (include "teamcity.fullname" .) (int .Values.server.service.port) }}
           {{- if .Values.agent.pvc.enabled -}}
           volumeMounts:
             - name:  agent-data
