@@ -9,7 +9,14 @@ database:
   pvc:
     enabled: true
     storageSize: 5Gi
-
+    nodeAffinity: 
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - nabiserver
 server:
   replicas: 2
   ingress:
@@ -27,9 +34,25 @@ server:
   pvc:
     enabled: true
     storageSize: 20Gi
+    nodeAffinity: 
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - nabiserver
 
 agent:
   replicas: 3
   pvc:
     enabled: true
     storageSize: 20Gi
+    nodeAffinity: 
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - nabiserver

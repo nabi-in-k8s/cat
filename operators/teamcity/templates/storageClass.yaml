@@ -23,14 +23,7 @@ spec:
   storageClassName: {{ include "teamcity.fullname" . }}-storageclass
   local:
     path: {{ .Values.server.pvc.path }}
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: app
-          operator: In
-          values:
-          - {{ include "teamcity.server.fullname" . }}
+  nodeAffinity: {{ .Values.server.pvc.nodeAffinity | toYaml | nindent 4 }}
 {{- end }}
 ---
 {{- if .Values.agent.pvc.enabled }}
@@ -48,14 +41,7 @@ spec:
   storageClassName: {{ include "teamcity.fullname" . }}-storageclass
   local:
     path: {{ .Values.agent.pvc.path }}
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: app
-          operator: In
-          values:
-          - {{ include "teamcity.agent.fullname" . }}
+  nodeAffinity: {{ .Values.agent.pvc.nodeAffinity | toYaml | nindent 4 }}
 {{- end }}
 ---
 {{- if .Values.database.pvc.enabled }}
@@ -73,12 +59,5 @@ spec:
   storageClassName: {{ include "teamcity.fullname" . }}-storageclass
   local:
     path: {{ .Values.database.pvc.path }}
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: app
-          operator: In
-          values:
-          - {{ include "teamcity.database.fullname" . }}
+  nodeAffinity: {{ .Values.database.pvc.nodeAffinity | toYaml | nindent 4 }}
 {{- end }}

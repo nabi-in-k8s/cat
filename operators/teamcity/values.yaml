@@ -46,6 +46,7 @@ database:
     enabled: false
     storageSize: 1Gi
     path: /data/teamcity/postgres
+    nodeAffinity: {}
 
 server:
   replicas: 1
@@ -72,6 +73,7 @@ server:
     enabled: false
     storageSize: 1Gi
     path: /data/teamcity/server
+    nodeAffinity: {}
 
 agent:
   replicas: 3
@@ -86,3 +88,4 @@ agent:
     enabled: false
     storageSize: 1Gi
     path: /data/teamcity/agent
+    nodeAffinity: {}
