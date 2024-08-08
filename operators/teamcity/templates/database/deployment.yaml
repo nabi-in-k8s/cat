@@ -21,17 +21,17 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.config.secretName }}
+                  name: {{ .Values.database.auth.secretName }}
                   key: password
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.config.secretName }}
+                  name: {{ .Values.database.auth.secretName }}
                   key: username
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.database.config.secretName }}
+                  name: {{ .Values.database.auth.secretName }}
                   key: database
             - name: PG_DATA
               value: /var/lib/postgresql/data

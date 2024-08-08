@@ -1,4 +1,4 @@
-{{- if .Values.server.pvc.enabled -}}
+{{- if .Values.server.pvc.enabled }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

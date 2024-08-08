@@ -24,12 +24,6 @@ spec:
         chart: {{ template "teamcity.chart" . }}
         release: {{ .Release.Name }}
     spec:
-      {{- if .Values.server.pvc.enabled -}}
-      volumes:
-        - name: server-data
-          persistentVolumeClaim:
-            claimName: {{ .Values.server.pvc.name }}
-      {{- end -}}
       containers:
         - name: {{ template "teamcity.fullname" . }}
           image: {{ printf "%s:%s" .Values.server.image.repository template "teamcity.server.imageTag" }}
@@ -43,3 +37,9 @@ spec:
             - name: {{ template "teamcity.name" . }}-http
               containerPort: {{ .Values.server.service.port }}
               protocol: TCP
+      {{- if .Values.server.pvc.enabled -}}
+      volumes:
+        - name: server-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.server.pvc.name }}
+      {{- end -}}

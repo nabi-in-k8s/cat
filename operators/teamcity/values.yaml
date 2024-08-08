@@ -36,10 +36,10 @@ database:
     tag: latest
     pullPolicy: IfNotPresent
 
-  config:
-    username: teamcity-user
-    password: teamcity-password
-    database: teamcity-database
+  auth:
+    # username: teamcity-user
+    # password: teamcity-password
+    # database: teamcity-database
     secretName: teamcity-postgres-secret
 
   service:
