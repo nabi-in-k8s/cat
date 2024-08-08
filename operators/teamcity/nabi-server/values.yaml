@@ -17,6 +17,9 @@ database:
             operator: In
             values:
             - nabiserver
+  securityContext:
+    runAsUser: 1000
+
 server:
   replicas: 1
   ingress:
