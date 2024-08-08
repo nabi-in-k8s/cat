@@ -8,7 +8,7 @@ metadata:
 spec:
   storageClassName: {{ include "teamcity.fullname" . }}-storageclass
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: {{ .Values.database.pvc.storageSize }}

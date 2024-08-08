@@ -1,0 +1,17 @@
+{{- if .Values.database.pvc.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "teamcity.database.fullname" . }}-pv
+  namespace: {{ template "teamcity.namespace" . }}
+spec:
+  capacity:
+    storage: {{ .Values.database.pvc.storageSize }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ include "teamcity.fullname" . }}-storageclass
+  local:
+    path: {{ .Values.database.pvc.path }}
+  nodeAffinity: {{ .Values.database.pvc.nodeAffinity | toYaml | nindent 4 }}
+{{- end }}
