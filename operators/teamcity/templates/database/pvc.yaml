@@ -6,7 +6,7 @@ metadata:
   namespace: {{ template "teamcity.namespace" . }}
   labels: {{ include "teamcity.database.label" . | nindent 4 }}
 spec:
-  storageClassName: {{ .Values.database.pvc.storageClass }}
+  storageClassName: {{ include "teamcity.fullname" . }}-storageclass
   accessModes:
     - ReadWriteOnce
   resources:

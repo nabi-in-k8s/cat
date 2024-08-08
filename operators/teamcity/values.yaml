@@ -43,8 +43,8 @@ database:
 
   pvc:
     enabled: false
-    storageClass: default
     storageSize: 1Gi
+    path: /data/teamcity/postgres
 
 server:
   replicas: 1
@@ -70,8 +70,8 @@ server:
 
   pvc:
     enabled: false
-    storageClass: default
     storageSize: 1Gi
+    path: /data/teamcity/server
 
 agent:
   replicas: 3
@@ -84,5 +84,5 @@ agent:
 
   pvc:
     enabled: false
-    storageClass: default
     storageSize: 1Gi
+    path: /data/teamcity/agent

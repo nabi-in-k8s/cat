@@ -1,0 +1,68 @@
+{{- if or (or .Values.server.pvc.enabled .Values.agent.pvc.enabled) .Values.database.pvc.enabled }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ include "teamcity.fullname" . }}-storageclass
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+{{- end }}
+---
+{{- if .Values.server.pvc.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "teamcity.server.fullname" . }}-pv
+spec:
+  capacity:
+    storage: {{ .Values.server.pvc.storageSize }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ include "teamcity.fullname" . }}-storageclass
+  local:
+    path: {{ .Values.server.pvc.path }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchLabels: {{ include "teamcity.server.label" . | nindent 12 }}
+{{- end }}
+---
+{{- if .Values.agent.pvc.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "teamcity.agent.fullname" . }}-pv
+spec:
+  capacity:
+    storage: {{ .Values.agent.pvc.storageSize }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ include "teamcity.fullname" . }}-storageclass
+  local:
+    path: {{ .Values.agent.pvc.path }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchLabels: {{ include "teamcity.agent.label" . | nindent 12 }}
+{{- end }}
+---
+{{- if .Values.database.pvc.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "teamcity.database.fullname" . }}-pv
+spec:
+  capacity:
+    storage: {{ .Values.database.pvc.storageSize }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ include "teamcity.fullname" . }}-storageclass
+  local:
+    path: {{ .Values.database.pvc.path }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchLabels: {{ include "teamcity.database.label" . | nindent 12 }}
+{{- end }}

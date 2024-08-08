@@ -6,6 +6,9 @@ rbac:
 
 database:
   replicas: 3
+  pvc:
+    enabled: true
+    storageSize: 5Gi
 
 server:
   replicas: 2
