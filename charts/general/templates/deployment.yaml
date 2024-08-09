@@ -1,30 +1,28 @@
-{{- if .Values.deployment.enable -}}
+{{ if .Values.deployment.create }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{- include "general.fullname" . }}
-  namespace: {{- include "general.namespace" . }}
-  labels: {{- include "general.labels" . | nindent 4 }}
+  name: {{ include "general.fullname" . }}
+  namespace: {{ include "general.namespace" . }}
+  labels: {{ include "general.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels: {{- include "general.selectorLabels" . | nindent 6 }}
-  replicas: {{ default 1 .Values.replicaCount | int }}
+  replicas: {{ default 1 .Values.replicas | int }}
   template:
     metadata:
       labels: {{- include "general.labels" . | nindent 8 }}
     spec:
       containers:
-      - name: {{- include "general.fullname" . }}
-        image: {{ printf "%s/%s:%s" .Values.image.registry .Values.image.repository (.Values.image.tag | toString) }}
+      - name: {{ include "general.fullname" . }}
+        image: {{ printf "%s%s:%s" (include "general.imageRegistry" .) .Values.image.repository (.Values.image.tag | toString) }}
         imagePullPolicy: IfNotPresent
         ports:
-        {{- range $index, $port := .Values.service.ports }}
-          - name: {{ $port.name }}
-            containerPort: {{ default $port.port $port.targetPort | int }}
-        {{- end }}
+          - name: {{ .Values.service.port.name }}
+            containerPort: {{ default .Values.service.port.port .Values.service.port.targetPort | int }}
         env:
-        {{- range $key, $value := .Values.envs }}
-          - name: {{ $key }}
-            value: {{ $value | quote }}
+        {{- range $index, $env := .Values.envs }}
+          - name: {{ $env.name }}
+            value: {{ $env.value | quote }}
         {{- end }}
-{{- end -}}
+{{ end }}
