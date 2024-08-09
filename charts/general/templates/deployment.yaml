@@ -1,0 +1,30 @@
+{{- if .Values.deployment.enable -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{- include "general.fullname" . }}
+  namespace: {{- include "general.namespace" . }}
+  labels: {{- include "general.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels: {{- include "general.selectorLabels" . | nindent 6 }}
+  replicas: {{ default 1 .Values.replicaCount | int }}
+  template:
+    metadata:
+      labels: {{- include "general.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{- include "general.fullname" . }}
+        image: {{ printf "%s/%s:%s" .Values.image.registry .Values.image.repository (.Values.image.tag | toString) }}
+        imagePullPolicy: IfNotPresent
+        ports:
+        {{- range $index, $port := .Values.service.ports }}
+          - name: {{ $port.name }}
+            containerPort: {{ default $port.port $port.targetPort | int }}
+        {{- end }}
+        env:
+        {{- range $key, $value := .Values.envs }}
+          - name: {{ $key }}
+            value: {{ $value | quote }}
+        {{- end }}
+{{- end -}}

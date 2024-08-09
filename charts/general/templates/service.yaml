@@ -1,0 +1,18 @@
+{{- if .Values.service.create }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "general.fullname" . }}
+  namespace: {{ include "general.namespace" . }}
+  labels: {{ include "general.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  selector: {{ include "general.selectorLabels" . | nindent 4 }}
+  ports:
+  - protocol: TCP
+    name: {{ .Values.service.port.name }}
+    port: {{ .Values.service.port.port }}
+    {{- if .Values.service.port.targetPort -}}
+    targetPort: {{ .Values.service.port.targetPort }}
+    {{- end -}}
+{{- end }}
