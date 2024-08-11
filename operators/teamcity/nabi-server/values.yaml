@@ -1,62 +1,33 @@
-serviceAccount:
-  create: true
-
-rbac:
-  create: true
-
 database:
   enabled: true
-  replicas: 1
-  pvc:
-    enabled: true
-    storageSize: 5Gi
-    nodeAffinity: 
-      required:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/hostname
-            operator: In
-            values:
-            - nabiserver
 
 server:
   enabled: true
-  replicas: 1
+
   ingress:
-    enabled: true
     annotations:
-      kubernetes.io/tls-acme: "true"
       kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    host: teamcity.k8s.nabi.kim
+    hosts:
+      - host: "teamcity.k8s.nabi.kim"
+        paths:
+          - path: /
+            pathType: Prefix
+            svcPort:
+              name: teamcity
     tls:
-      enabled: true
-      secretName: teamcity-tls
-  pvc:
-    enabled: true
-    storageSize: 20Gi
-    nodeAffinity: 
-      required:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/hostname
-            operator: In
-            values:
-            - nabiserver
+      - secretName: teamcity-server-tls
+        hosts:
+          - "teamcity.k8s.nabi.kim"
 
-agent:
+agent-0:
   enabled: true
-  replicas: 3
-  pvc:
-    enabled: true
-    storageSize: 20Gi
-    nodeAffinity: 
-      required:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: kubernetes.io/hostname
-            operator: In
-            values:
-            - nabiserver
+
+agent-1:
+  enabled: true
+
+agent-2:
+  enabled: true

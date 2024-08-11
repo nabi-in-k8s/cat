@@ -1,25 +1,36 @@
 {{ $fullName := include "general.fullname" . }}
 {{ $namespace := include "general.namespace" . }}
 {{ $labels := include "general.labels" . }}
-{{ $affinity := .Values.affinity | toYaml | nindent 4 }}
+{{ $affinity := .Values.affinity }}
 
 {{ range .Values.persistentVolumes }}
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ $fullName }}
+  name: {{ default $fullName .name }}
   namespace: {{ $namespace }}
   labels:
     {{- $labels | nindent 4 }}
   annotations: {{- .annotations | toYaml | nindent 4 }}
 spec:
-  storageClassName: {{ $fullName }}
+  storageClassName: {{ default $fullName .storageClass }}
   persistentVolumeReclaimPolicy: {{ .reclaimPolicy }}
   accessModes: {{ .accessModes | toJson | nindent 4 }}
   local:
     path: {{ .path }}
   capacity:
     storage: {{ .size }}
-  nodeAffinity: {{- $affinity }}
+  {{ if $affinity.nodeAffinity }}
+  nodeAffinity: {{- $affinity.nodeAffinity | toYaml | nindent 4 }}
+  {{ else }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - nabiserver
+  {{ end }}
 {{ end }}
