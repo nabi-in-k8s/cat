@@ -12,13 +12,13 @@ spec:
       {{- include "general.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.pod.labels }}
+      {{- with .Values.pod.annotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "general.labels" . | nindent 8 }}
-        {{- with .Values.pod.annotations }}
+        {{- with .Values.pod.labels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
