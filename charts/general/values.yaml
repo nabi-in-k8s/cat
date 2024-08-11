@@ -1,3 +1,7 @@
+nameOverride: ""
+fullnameOverride: ""
+namespaceOverride: ""
+
 replicas: 1
 
 image:
@@ -6,18 +10,11 @@ image:
   tag: ""
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-namespaceOverride: ""
+# - name: secretName
 
-pod:
-  annotations: {}
-  labels: {}
-
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext: {}
+deployment:
+  create: false
+  securityContext: {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -25,44 +22,29 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-service:
-  type: ClusterIP
-  name: http
-  port: 80
-
-ingress:
-  enabled: false
-  className: nginx
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: ""
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - ""
-
-resources:
-  limits:
-    cpu: 100m
-    memory: 128Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
-
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
+container:
+  labels: {}
+  annotations: {}
+  securityContext: {}
+    # fsGroup: 2000
+  livenessProbe: {}
+    # httpGet:
+    #   path: /
+    #   port: http
+  readinessProbe: {}
+    # httpGet:
+    #   path: /
+    #   port: http
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+  env: []
+  # - name: FOO
+  #   value: BAR
 
 volumes: []
 # - name: foo
@@ -77,27 +59,52 @@ volumeMounts: []
 
 nodeSelector: {}
 
-tolerations: []
-
 affinity: {}
+
+service:
+  create: false
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      # target: 80
+
+ingress:
+  create: false
+  className: nginx
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+          svcPort:
+            name: http
+            number: 80
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - ""
 
 storageClass:
   create: false
   provisioner: kubernetes.io/no-provisioner
   volumeBindingMode: WaitForFirstConsumer
 
-pv:
-  create: false
-  annotations: {}
-  accessModes:
-    - ReadWriteOnce
-  reclaimPolicy: Retain
-  size: 1Gi
-  path: ""
+persistentVolumes: []
+  # - name: ""
+  #   annotations: {}
 
-pvc:
-  create: false
-  annotations: {}
-  accessModes:
-    - ReadWriteOnce
-  size: 1Gi
+  #   accessModes:
+  #     - ReadWriteOnce
+  #   reclaimPolicy: Retain
+  #   size: 1Gi
+  #   path: ""
+
+  #   claim:
+  #     create: true
+  #     accessModes: []
+  #     size: 1Gi

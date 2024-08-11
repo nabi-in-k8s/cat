@@ -1,16 +1,22 @@
-{{ if .Values.pvc.create }}
+{{ $fullName := include "general.fullname" . }}
+{{ $namespace := include "general.namespace" . }}
+{{ $labels := include "general.labels" . }}
+
+{{ range .Values.persistentVolumes }}
+{{ if .claim.create }}
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "general.fullname" . }}
-  namespace: {{ include "general.namespace" . }}
+  name: {{ $fullName }}
+  namespace: {{ $namespace }}
   labels:
-    {{- include "general.labels" . | nindent 4 }}
-  annotations: {{- .Values.pvc.annotations | toYaml | nindent 4 }}
+    {{- $labels | nindent 4 }}
 spec:
-  storageClassName: {{ include "general.fullname" . }}
-  accessModes: {{- .Values.pvc.accessModes | toJson | nindent 4 }}
+  storageClassName: {{ $fullName }}
+  accessModes: {{- default .accessModes .claim.accessModes | toJson | nindent 4 }}
   resources:
     requests:
-      storage: {{ .Values.pvc.size }}
+      storage: {{ default .size .claim.size }}
+{{ end }}
 {{ end }}
