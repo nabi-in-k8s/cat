@@ -3,8 +3,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ include "general.fullname" . }}
-  labels: {{ include "general.labels" . | nindent 4 }}
   namespace: {{ include "general.namespace" . }}
+  labels:
+    {{- include "general.labels" . | nindent 4 }}
   annotations: {{- .Values.pvc.annotations | toYaml | nindent 4 }}
 spec:
   storageClassName: {{ include "general.fullname" . }}
