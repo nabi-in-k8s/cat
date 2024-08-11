@@ -1,0 +1,19 @@
+{{- if .Values.pv.create }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "general.fullname" . }}
+  namespace: {{ include "general.namespace" . }}
+  labels:
+    {{- include "general.labels" . | nindent 4 }}
+  annotations: {{- .Values.pv.annotations | toYaml | nindent 4 }}
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ include "general.fullname" . }}
+  nodeAffinity: {{- .Values.affinity | toYaml | nindent 4 }}
+  accessModes: {{ .Values.pv.accessModes | toJson | nindent 4 }}
+  local:
+    path: {{ .Values.pv.path }}
+  capacity:
+    storage: {{ .Values.pv.size }}
+{{- end }}

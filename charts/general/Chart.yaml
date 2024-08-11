@@ -1,0 +1,7 @@
+apiVersion: v2
+name: general
+description: General Chart for deploy apps
+
+type: application
+
+version: 1.0.0
