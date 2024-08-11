@@ -1,0 +1,11 @@
+{{- if .Values.storageClass.create }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ include "general.fullname" . }}
+  namespace: {{ include "general.namespace" . }}
+  labels:
+    {{- include "general.labels" . | nindent 4 }}
+provisioner: {{ .Values.storageClass.provisioner }}
+volumeBindingMode: {{ .Values.storageClass.volumeBindingMode }}
+{{- end }}

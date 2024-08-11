@@ -79,3 +79,24 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+storageClass:
+  create: false
+  provisioner: kubernetes.io/no-provisioner
+  volumeBindingMode: WaitForFirstConsumer
+
+pv:
+  create: false
+  annotations: {}
+  accessModes:
+    - ReadWriteOnce
+  reclaimPolicy: Retain
+  size: 1Gi
+  path: ""
+
+pvc:
+  create: false
+  annotations: {}
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
