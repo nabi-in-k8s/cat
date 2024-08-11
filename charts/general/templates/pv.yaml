@@ -1,19 +1,25 @@
-{{- if .Values.pv.create }}
+{{ $fullName := include "general.fullname" . }}
+{{ $namespace := include "general.namespace" . }}
+{{ $labels := include "general.labels" . }}
+{{ $affinity := .Values.affinity | toYaml | nindent 4 }}
+
+{{ range .Values.persistentVolumes }}
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "general.fullname" . }}
-  namespace: {{ include "general.namespace" . }}
+  name: {{ $fullName }}
+  namespace: {{ $namespace }}
   labels:
-    {{- include "general.labels" . | nindent 4 }}
-  annotations: {{- .Values.pv.annotations | toYaml | nindent 4 }}
+    {{- $labels | nindent 4 }}
+  annotations: {{- .annotations | toYaml | nindent 4 }}
 spec:
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: {{ include "general.fullname" . }}
-  nodeAffinity: {{- .Values.affinity | toYaml | nindent 4 }}
-  accessModes: {{ .Values.pv.accessModes | toJson | nindent 4 }}
+  storageClassName: {{ $fullName }}
+  persistentVolumeReclaimPolicy: {{ .reclaimPolicy }}
+  accessModes: {{ .accessModes | toJson | nindent 4 }}
   local:
-    path: {{ .Values.pv.path }}
+    path: {{ .path }}
   capacity:
-    storage: {{ .Values.pv.size }}
-{{- end }}
+    storage: {{ .size }}
+  nodeAffinity: {{- $affinity }}
+{{ end }}
