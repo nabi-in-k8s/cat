@@ -8,6 +8,7 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+namespaceOverride: ""
 
 pod:
   annotations: {}

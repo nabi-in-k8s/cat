@@ -4,6 +4,7 @@ metadata:
   name: {{ include "general.fullname" . }}
   labels:
     {{- include "general.labels" . | nindent 4 }}
+  namespace: {{ include "general.namespace" . }}
 spec:
   replicas: {{ .Values.replicas }}
   selector:

@@ -4,6 +4,7 @@ kind: PersistentVolume
 metadata:
   name: {{ include "general.fullname" . }}
   labels: {{- include "general.labels" . | nindent 4 }}
+  namespace: {{ include "general.namespace" . }}
   annotations: {{- .Values.pv.annotations | toYaml | nindent 4 }}
 spec:
   persistentVolumeReclaimPolicy: Retain

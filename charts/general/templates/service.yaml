@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "general.fullname" . }}
+  namespace: {{ include "general.namespace" . }}
   labels:
     {{- include "general.labels" . | nindent 4 }}
 spec:

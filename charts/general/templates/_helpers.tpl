@@ -32,3 +32,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/name: {{ include "general.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{- define "general.namespace" -}}
+{{- default .Release.Namespace .Values.namespaceOverride }}
+{{- end }}
