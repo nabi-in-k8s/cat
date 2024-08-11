@@ -4,9 +4,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ include "general.fullname" . }}
   labels: {{ include "general.labels" . | nindent 4 }}
+  annotations: {{- .Values.pvc.annotations | toYaml | nindent 4 }}
 spec:
   storageClassName: {{ include "general.fullname" . }}
-  accessModes: {{- .Values.pvc.accessModes | nindent 4 }}
+  accessModes: {{- .Values.pvc.accessModes | toJson | nindent 4 }}
   resources:
     requests:
       storage: {{ .Values.pvc.size }}

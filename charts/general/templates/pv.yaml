@@ -4,12 +4,12 @@ kind: PersistentVolume
 metadata:
   name: {{ include "general.fullname" . }}
   labels: {{- include "general.labels" . | nindent 4 }}
-  annotations: {{ .Values.pv.annotations | nindent 4 }}
+  annotations: {{- .Values.pv.annotations | toYaml | nindent 4 }}
 spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: {{ include "general.fullname" . }}
-  accessModes: {{- .Values.pv.accessModes | nindent 4 }}
-  nodeAffinity: {{ .Values.affinity | toYaml | nindent 4 }}
+  nodeAffinity: {{- .Values.affinity | toYaml | nindent 4 }}
+  accessModes: {{ .Values.pv.accessModes | toJson | nindent 4 }}
   local:
     path: {{ .Values.pv.path }}
   capacity:
