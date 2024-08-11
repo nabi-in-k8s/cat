@@ -6,3 +6,34 @@ description: TeamCity For CI/CD on Kubernetes
 version: 0.1.0
 
 type: application
+
+dependencies:
+  - name: general
+    alias: database
+    version: 1.0.0
+    repository: oci://harbor.k8s.nabi.kim/nabi
+    condition: database.enabled
+
+  - name: general
+    alias: server
+    version: 1.0.0
+    repository: oci://harbor.k8s.nabi.kim/nabi
+    condition: server.enabled
+
+  - name: general
+    alias: agent-0
+    version: 1.0.0
+    repository: oci://harbor.k8s.nabi.kim/nabi
+    condition: agent-0.enabled
+
+  - name: general
+    alias: agent-1
+    version: 1.0.0
+    repository: oci://harbor.k8s.nabi.kim/nabi
+    condition: agent-1.enabled
+
+  - name: general
+    alias: agent-2
+    version: 1.0.0
+    repository: oci://harbor.k8s.nabi.kim/nabi
+    condition: agent-2.enabled
