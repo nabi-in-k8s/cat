@@ -61,7 +61,7 @@ ghost:
     create: false
     type: ClusterIP
     ports:
-      - name: mariadb
+      - name: ghost
         port: 2368
         target: 2368
 
@@ -166,7 +166,7 @@ mariadb:
     create: false
     type: ClusterIP
     ports:
-      - name: ghost
+      - name: mariadb
         port: 3306
         target: 3306
 
