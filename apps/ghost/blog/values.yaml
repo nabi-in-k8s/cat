@@ -1,6 +1,6 @@
 ghost:
   enabled: true
-  replicas: 3
+  replicas: 1
 
   image:
     tag: 5.89.0
