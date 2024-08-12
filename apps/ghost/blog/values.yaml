@@ -40,6 +40,8 @@ ghost:
           secretKeyRef:
             name: blog-database-secret
             key: password
+      - name: mail__from
+        value: blog@nabi.kim
 
   volumes:
     - name: blog-ghost-contents

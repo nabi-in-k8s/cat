@@ -53,6 +53,8 @@ ghost:
           secretKeyRef:
             name: mariadb-secret
             key: password
+      - name: mail__from
+        value: ""
 
   volumes:
     - name: ghost-contents
