@@ -117,13 +117,13 @@ mariadb:
   container:
     livenessProbe:
       exec:
-        command: ["bash", "-c", "mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
+        command: ["bash", "-c", "mysqladmin status -uroot -p$MYSQL_ROOT_PASSWORD"]
       initialDelaySeconds: 60
       periodSeconds: 10
       timeoutSeconds: 1
     readinessProbe:
       exec:
-        command: ["bash", "-c", "mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
+        command: ["bash", "-c", "mysqladmin status -uroot -p$MYSQL_ROOT_PASSWORD"]
       initialDelaySeconds: 30
       periodSeconds: 10
       timeoutSeconds: 1
