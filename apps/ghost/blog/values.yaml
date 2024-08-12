@@ -67,7 +67,7 @@ ghost:
     hosts:
       - host: blog.k8s.nabi.kim
         paths:
-          - prefix: /
+          - path: /
             pathType: Prefix
             svcPort:
               name: ghost
