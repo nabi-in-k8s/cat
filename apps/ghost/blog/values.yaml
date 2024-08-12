@@ -9,39 +9,54 @@ ghost:
     create: true
 
   container:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
     env:
       - name: NODE_ENV
         value: production
-      - name: database__connection__filename
-        value: /var/lib/ghost/content/data/ghost.db
       - name: GHOST_HOST
         value: blog.k8s.nabi.kim
       - name: GHOST_PROTOCOL
-        value: blog.k8s.nabi.kim
+        value: https
+      - name: database__client
+        value: mysql
+      - name: database__connection__host
+        value: blog-database
+      - name: database__connection__database
+        valueFrom:
+          secretKeyRef:
+            name: blog-database-secret
+            key: database
+      - name: database__connection__user
+        valueFrom:
+          secretKeyRef:
+            name: blog-database-secret
+            key: username
+      - name: database__connection__password
+        valueFrom:
+          secretKeyRef:
+            name: blog-database-secret
+            key: password
 
   volumes:
     - name: blog-ghost-contents
       persistentVolumeClaim:
         claimName: blog-ghost-contents
-    - name: blog-ghost-database
-      persistentVolumeClaim:
-        claimName: blog-ghost-database
 
   volumeMounts:
     - name: blog-ghost-contents
       mountPath: /var/lib/ghost/content
-    - name: blog-ghost-database
-      mountPath: /var/lib/ghost/content/data
 
   service:
     create: true
-    ports:
-      - name: ghost
-        port: 2368
-        target: 2368
 
   ingress:
-    create: false
+    create: true
     className: nginx
     annotations:
       kubernetes.io/ingress.class: nginx
@@ -75,7 +90,56 @@ ghost:
       reclaimPolicy: Retain
       claim:
         create: true
-    - name: blog-ghost-database
+
+mariadb:
+  enabled: true
+  replicas: 1
+
+  deployment:
+    create: true
+
+  container:
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: blog-database-secret
+            key: root-password
+      - name: MYSQL_USER
+        valueFrom:
+          secretKeyRef:
+            name: blog-database-secret
+            key: username
+      - name: MYSQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: blog-database-secret
+            key: password
+      - name: MYSQL_DATABASE
+        valueFrom:
+          secretKeyRef:
+            name: blog-database-secret
+            key: database
+
+  volumes:
+    - name: blog-database
+      persistentVolumeClaim:
+        claimName: blog-database
+
+  volumeMounts:
+    - name: blog-database
+      mountPath: ~/mariadb_data
+
+  service:
+    create: true
+
+  storageClass:
+    create: true
+    provisioner: kubernetes.io/no-provisioner
+    volumeBindingMode: WaitForFirstConsumer
+
+  persistentVolumes:
+    - name: blog-database
       accessModes:
         - ReadWriteMany
       size: 5Gi

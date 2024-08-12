@@ -1,4 +1,6 @@
 ghost:
+  nameOverride: "ghost"
+
   enabled: false
   replicas: 1
 
@@ -23,38 +25,43 @@ ghost:
       httpGet:
         path: /
         port: ghost
-    resources: {}
-      # limits:
-      #   cpu: 100m
-      #   memory: 128Mi
-      # requests:
-      #   cpu: 100m
-      #   memory: 128Mi
     env:
       - name: NODE_ENV
         value: production
-      - name: database__connection__filename
-        value: /var/lib/ghost/content/data/ghost.db
+      - name: database__client
+        value: mysql
+      - name: database__connection__host
+        value: blog-database
+      - name: database__connection__database
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: database
+      - name: database__connection__user
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: username
+      - name: database__connection__password
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: password
 
   volumes:
     - name: ghost-contents
       persistentVolumeClaim:
         claimName: ghost-contents
-    - name: ghost-database
-      persistentVolumeClaim:
-        claimName: ghost-database
 
   volumeMounts:
     - name: ghost-contents
       mountPath: /var/lib/ghost/content
-    - name: ghost-database
-      mountPath: /var/lib/ghost/content/data
 
   service:
     create: false
     type: ClusterIP
     ports:
-      - name: ghost
+      - name: mariadb
         port: 2368
         target: 2368
 
@@ -90,6 +97,89 @@ ghost:
     #   reclaimPolicy: Retain
     #   claim:
     #     create: true
+
+mariadb:
+  enabled: false
+  replicas: 1
+
+  nameOverride: "database"
+
+  image:
+    repository: mariadb
+    tag: 10.4
+
+  deployment:
+    create: false
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000
+
+  container:
+    livenessProbe:
+      exec:
+        command: ["bash", "-c", "mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 1
+    readinessProbe:
+      exec:
+        command: ["bash", "-c", "mysqladmin status -uroot -p$MARIADB_ROOT_PASSWORD"]
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 1
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: root-password
+      - name: MYSQL_USER
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: username
+      - name: MYSQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: password
+      - name: MYSQL_DATABASE
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: database
+
+  volumes:
+    - name: ghost-database
+      persistentVolumeClaim:
+        claimName: ghost-database
+
+  volumeMounts:
+    - name: ghost-database
+      mountPath: ~/mariadb_data
+
+  service:
+    create: false
+    type: ClusterIP
+    ports:
+      - name: ghost
+        port: 3306
+        target: 3306
+
+  storageClass:
+    create: false
+    provisioner: kubernetes.io/no-provisioner
+    volumeBindingMode: WaitForFirstConsumer
+
+  persistentVolumes: []
     # - name: ghost-database
     #   accessModes:
     #     - ReadWriteMany
