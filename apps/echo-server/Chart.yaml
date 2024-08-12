@@ -1,0 +1,14 @@
+apiVersion: v2
+name: echo-server
+description: Echo Server Chart for testing
+
+type: application
+
+version: 1.0.0
+
+dependencies:
+  - name: general
+    alias: echo-server
+    version: 1.0.1
+    repository: oci://harbor.k8s.nabi.kim/nabi
+    condition: echo-server.enabled

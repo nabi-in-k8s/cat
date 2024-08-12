@@ -1,0 +1,6 @@
+dependencies:
+- name: general
+  repository: oci://harbor.k8s.nabi.kim/nabi
+  version: 1.0.1
+digest: sha256:9f47d72f5b389d395aa778239d3b38f3435216b53d91a944b920d6c3596c652c
+generated: "2024-08-12T11:30:06.6988+09:00"
