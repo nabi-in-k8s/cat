@@ -1,0 +1,14 @@
+apiVersion: v2
+name: Ghost
+description: Ghost Chart for CMS
+
+type: application
+
+version: 1.0.0
+
+dependencies:
+  - name: general
+    alias: ghost
+    version: 1.0.0
+    repository: oci://harbor.k8s.nabi.kim/nabi
+    condition: ghost.enabled

@@ -1,0 +1,100 @@
+ghost:
+  enabled: false
+  replicas: 1
+
+  image:
+    repository: ghost
+    pullPolicy: IfNotPresent
+    tag: latest
+
+  deployment:
+    create: false
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000
+
+  container:
+    livenessProbe:
+      httpGet:
+        path: /
+        port: ghost
+    readinessProbe:
+      httpGet:
+        path: /
+        port: ghost
+    resources: {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 128Mi
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: database__connection__filename
+        value: /var/lib/ghost/content/data/ghost.db
+
+  volumes:
+    - name: ghost-contents
+      persistentVolumeClaim:
+        claimName: ghost-contents
+    - name: ghost-database
+      persistentVolumeClaim:
+        claimName: ghost-database
+
+  volumeMounts:
+    - name: ghost-contents
+      mountPath: /var/lib/ghost/content
+    - name: ghost-database
+      mountPath: /var/lib/ghost/content/data
+
+  service:
+    create: false
+    type: ClusterIP
+    ports:
+      - name: ghost
+        port: 2368
+        target: 2368
+
+  ingress:
+    create: false
+    className: nginx
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: ""
+        paths:
+          - prefix: /
+            pathType: Prefix
+            svcPort:
+              name: ghost
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - ""
+
+  storageClass:
+    create: false
+    provisioner: kubernetes.io/no-provisioner
+    volumeBindingMode: WaitForFirstConsumer
+
+  persistentVolumes: []
+    # - name: ghost-contents
+    #   accessModes:
+    #     - ReadWriteMany
+    #   size: 20Gi
+    #   path: ""
+    #   reclaimPolicy: Retain
+    #   claim:
+    #     create: true
+    # - name: ghost-database
+    #   accessModes:
+    #     - ReadWriteMany
+    #   size: 5Gi
+    #   path: ""
+    #   reclaimPolicy: Retain
+    #   claim:
+    #     create: true
