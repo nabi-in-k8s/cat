@@ -19,10 +19,8 @@ ghost:
     env:
       - name: NODE_ENV
         value: production
-      - name: GHOST_HOST
-        value: blog.k8s.nabi.kim
-      - name: GHOST_PROTOCOL
-        value: https
+      - name: url
+        value: https://blog.k8s.nabi.kim
       - name: database__client
         value: mysql
       - name: database__connection__host
