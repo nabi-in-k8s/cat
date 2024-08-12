@@ -86,7 +86,7 @@ ghost:
       accessModes:
         - ReadWriteMany
       size: 20Gi
-      path: /data/ghost/content
+      path: /k3s-volumes/blog/ghost-content
       reclaimPolicy: Retain
       claim:
         create: true
@@ -143,7 +143,7 @@ mariadb:
       accessModes:
         - ReadWriteMany
       size: 5Gi
-      path: /data/ghost/database
+      path: /k3s-volumes/blog/database
       reclaimPolicy: Retain
       claim:
         create: true
