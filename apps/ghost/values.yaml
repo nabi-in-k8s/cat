@@ -18,13 +18,17 @@ ghost:
 
   container:
     livenessProbe:
-      httpGet:
-        path: /
+      tcpSocket:
         port: ghost
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 1
     readinessProbe:
-      httpGet:
-        path: /
+      tcpSocket:
         port: ghost
+      initialDelaySeconds: 15
+      periodSeconds: 10
+      timeoutSeconds: 1
     env:
       - name: NODE_ENV
         value: production
