@@ -1,0 +1,194 @@
+ghost:
+  nameOverride: "ghost"
+
+  enabled: false
+  replicas: 1
+
+  image:
+    repository: ghost
+    pullPolicy: IfNotPresent
+    tag: latest
+
+  deployment:
+    create: false
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000
+
+  container:
+    livenessProbe:
+      tcpSocket:
+        port: ghost
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 1
+    readinessProbe:
+      tcpSocket:
+        port: ghost
+      initialDelaySeconds: 15
+      periodSeconds: 10
+      timeoutSeconds: 1
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: url
+        value: ""
+      - name: database__client
+        value: mysql
+      - name: database__connection__host
+        value: blog-database
+      - name: database__connection__database
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: database
+      - name: database__connection__user
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: username
+      - name: database__connection__password
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: password
+      - name: mail__from
+        value: ""
+
+  volumes:
+    - name: ghost-contents
+      persistentVolumeClaim:
+        claimName: ghost-contents
+
+  volumeMounts:
+    - name: ghost-contents
+      mountPath: /var/lib/ghost/content
+
+  service:
+    create: false
+    type: ClusterIP
+    ports:
+      - name: ghost
+        port: 2368
+        target: 2368
+
+  ingress:
+    create: false
+    className: nginx
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: ""
+        paths:
+          - prefix: /
+            pathType: Prefix
+            svcPort:
+              name: ghost
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - ""
+
+  storageClass:
+    create: false
+    provisioner: kubernetes.io/no-provisioner
+    volumeBindingMode: WaitForFirstConsumer
+
+  persistentVolumes: []
+    # - name: ghost-contents
+    #   accessModes:
+    #     - ReadWriteMany
+    #   size: 20Gi
+    #   path: ""
+    #   reclaimPolicy: Retain
+    #   claim:
+    #     create: true
+
+mariadb:
+  enabled: false
+  replicas: 1
+
+  nameOverride: "database"
+
+  image:
+    repository: mariadb
+    tag: 10.4
+
+  deployment:
+    create: false
+
+  container:
+    livenessProbe:
+      exec:
+        command: ["bash", "-c", "mysqladmin status -uroot -p$MYSQL_ROOT_PASSWORD"]
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      timeoutSeconds: 1
+    readinessProbe:
+      exec:
+        command: ["bash", "-c", "mysqladmin status -uroot -p$MYSQL_ROOT_PASSWORD"]
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 1
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+    env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: root-password
+      - name: MYSQL_USER
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: username
+      - name: MYSQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: password
+      - name: MYSQL_DATABASE
+        valueFrom:
+          secretKeyRef:
+            name: mariadb-secret
+            key: database
+
+  volumes:
+    - name: ghost-database
+      persistentVolumeClaim:
+        claimName: ghost-database
+
+  volumeMounts: []
+    # - name: ghost-database
+    #   mountPath: /var/lib/mysql
+
+  service:
+    create: false
+    type: ClusterIP
+    ports:
+      - name: mariadb
+        port: 3306
+        target: 3306
+
+  storageClass:
+    create: false
+    provisioner: kubernetes.io/no-provisioner
+    volumeBindingMode: WaitForFirstConsumer
+
+  persistentVolumes: []
+    # - name: ghost-database
+    #   accessModes:
+    #     - ReadWriteMany
+    #   size: 5Gi
+    #   path: ""
+    #   reclaimPolicy: Retain
+    #   claim:
+    #     create: true
