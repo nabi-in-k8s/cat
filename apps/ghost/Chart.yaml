@@ -15,6 +15,6 @@ dependencies:
 
   - name: general
     alias: mariadb
-    version: 1.0.0
+    version: 1.0.1
     repository: oci://harbor.k8s.nabi.kim/nabi
     condition: mariadb.enabled
