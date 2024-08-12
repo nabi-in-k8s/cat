@@ -128,7 +128,7 @@ mariadb:
 
   volumeMounts:
     - name: blog-database
-      mountPath: ~/mariadb_data
+      mountPath: /var/lib/mysql
 
   service:
     create: true

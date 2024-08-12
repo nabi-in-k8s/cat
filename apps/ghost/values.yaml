@@ -161,9 +161,9 @@ mariadb:
       persistentVolumeClaim:
         claimName: ghost-database
 
-  volumeMounts:
-    - name: ghost-database
-      mountPath: ~/mariadb_data
+  volumeMounts: []
+    # - name: ghost-database
+    #   mountPath: /var/lib/mysql
 
   service:
     create: false
