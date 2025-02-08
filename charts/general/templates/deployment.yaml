@@ -24,6 +24,10 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      {{- with .Values.deployment.network }}
+      dnsPolicy: {{ .dnsPolicy | default "ClusterFirst" }}
+      hostNetwork: {{ .hostNetwork | default false }}
+      {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
