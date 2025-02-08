@@ -1,0 +1,83 @@
+homebridge:
+  nameOverride: "homebridge"
+
+  enabled: false
+  replicas: 1
+
+  image:
+    repository: homebridge/homebridge
+    pullPolicy: IfNotPresent
+    tag: latest
+
+  deployment:
+    create: true
+    network:
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+    securityContext:
+      runAsNonRoot: false
+
+  container:
+    livenessProbe:
+      tcpSocket:
+        port: homebridge
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 1
+    readinessProbe:
+      tcpSocket:
+        port: homebridge
+      initialDelaySeconds: 15
+      periodSeconds: 10
+      timeoutSeconds: 1
+
+  volumes:
+    - name: homebridge
+      persistentVolumeClaim:
+        claimName: homebridge
+
+  volumeMounts:
+    - name: homebridge
+      mountPath: /volumes/homebridge
+
+  service:
+    create: true
+    type: ClusterIP
+    ports:
+      - name: homebridge
+        port: 8581
+        target: 8581
+
+  ingress:
+    create: true
+    className: nginx
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: homebridge.k8s.nabi.kim
+        paths:
+          - path: /
+            pathType: Prefix
+            svcPort:
+              name: homebridge
+    tls:
+      - secretName: homebridge-tls
+        hosts:
+          - homebridge.k8s.nabi.kim
+
+  storageClass:
+    create: true
+    provisioner: kubernetes.io/no-provisioner
+    volumeBindingMode: WaitForFirstConsumer
+
+  persistentVolumes:
+    - name: homebridge
+      accessModes:
+        - ReadWriteMany
+      size: 10Gi
+      path: /k3s-volumes/homebridge
+      reclaimPolicy: Retain
+      claim:
+        create: true

@@ -1,0 +1,14 @@
+apiVersion: v2
+name: homebridge
+description: Homebridge Chart for Home IOT
+
+type: application
+
+version: 1.0.0
+
+dependencies:
+  - name: general
+    alias: homebridge
+    version: 1.0.3
+    repository: oci://harbor.k8s.nabi.kim/nabi
+    condition: homebridge.enabled
