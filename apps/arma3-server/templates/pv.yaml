@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: missions
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local-path
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.pv.missions.path }}
+  capacity:
+    storage: {{ .Values.pv.missions.size }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: configs
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local-path
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.pv.configs.path }}
+  capacity:
+    storage: {{ .Values.pv.configs.size }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mods
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local-path
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.pv.mods.path }}
+  capacity:
+    storage: {{ .Values.pv.mods.size }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: server-mods
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local-path
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: {{ .Values.pv.serverMods.path }}
+  capacity:
+    storage: {{ .Values.pv.serverMods.size }}

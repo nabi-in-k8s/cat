@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: macvlan
+        ddns-target: {{ .Values.ddns.target }}
+        ddns-record-id: {{ .Values.ddns.recordId }}
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: arma3-server
+          image: ghcr.io/brettmayson/arma3server/arma3server:latest
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+          ports:
+            - name: sftp
+              containerPort: 22
+              protocol: TCP
+            - name: arma3-2302
+              containerPort: 2302
+              protocol: UDP
+            - name: arma3-2303
+              containerPort: 2303
+              protocol: UDP
+            - name: arma3-2304
+              containerPort: 2304
+              protocol: UDP
+            - name: arma3-2305
+              containerPort: 2305
+              protocol: UDP
+            - name: arma3-2306
+              containerPort: 2306
+              protocol: UDP
+          resources:
+            requests:
+              cpu: 4000m
+              memory: 16Gi
+            limits:
+              cpu: 8000m
+              memory: 32Gi
+          volumeMounts:
+            - name: missions
+              mountPath: /arma3/mpmissions
+            - name: configs
+              mountPath: /arma3/configs
+            - name: mods
+              mountPath: /arma3/mods
+            - name: server-mods
+              mountPath: /arma3/servermods
+          env:
+            - name: STEAM_USER
+              valueFrom:
+                secretKeyRef:
+                  name: arma3-secrets
+                  key: steam-user
+            - name: STEAM_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: arma3-secrets
+                  key: steam-password
+            - name: ARMA_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: arma3-config
+                  key: server.cfg
+      volumes:
+        - name: missions
+          persistentVolumeClaim:
+            claimName: missions
+        - name: configs
+          persistentVolumeClaim:
+            claimName: configs
+        - name: mods
+          persistentVolumeClaim:
+            claimName: mods
+        - name: server-mods
+          persistentVolumeClaim:
+            claimName: server-mods

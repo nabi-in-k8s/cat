@@ -1,0 +1,17 @@
+ddns:
+  target: ""
+  recordId: ""
+
+pv:
+  missions:
+    size: 50Gi
+    path: /k3s-volumes/arma3/missions
+  configs:
+    size: 5Gi
+    path: /k3s-volumes/arma3/configs
+  mods:
+    size: 75Gi
+    path: /k3s-volumes/arma3/mods
+  serverMods:
+    size: 75Gi
+    path: /k3s-volumes/arma3/server-mods

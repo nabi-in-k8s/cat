@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: missions
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: configs
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mods
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 75Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: server-mods
+  namespace: {{ .Release.Namespace }}
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 75Gi

@@ -1,0 +1,7 @@
+apiVersion: v2
+
+name: arma-3-server
+description: Arma 3 Dedicated Server
+
+type: application
+version: 0.1.0
