@@ -1,0 +1,14 @@
+apiVersion: v2
+
+name: multus
+description: Multus CNI
+
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: multus-cni
+    alias: multus
+    version: 2.2.7
+    repository: https://charts.bitnami.com/bitnami
+    condition: multus.enabled

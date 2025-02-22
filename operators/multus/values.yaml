@@ -1,0 +1,9 @@
+multus:
+  enabled: true
+
+  hostCNINetDir: /var/lib/rancher/k3s/agent/etc/cni/net.d
+  hostCNIBinDir: /var/lib/rancher/k3s/data/current/bin
+
+  ddns:
+    enabled: true
+    zoneId: "YOUR_ZONE_ID"

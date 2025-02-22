@@ -1,0 +1,86 @@
+{{ if .Values.multus.ddns.enabled }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ddns-updater
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: ddns-updater
+  template:
+    metadata:
+      labels:
+        app: ddns-updater
+    spec:
+      serviceAccountName: ddns-updater
+      containers:
+      - name: ddns-updater
+        image: bitnami/kubectl:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            while true; do
+              echo "Checking for macvlan Pods with DDNS target..."
+
+              POD_LIST=$(kubectl get pods -A -o jsonpath='{range .items[*]}{.metadata.annotations.k8s\.v1\.cni\.cncf\.io/networks}{"\t"}{.metadata.annotations.ddns-target}{"\t"}{.status.podIP}{"\t"}{.metadata.annotations.ddns-record-id}{"\n"}{end}' | grep 'macvlan')
+
+              echo "Found Pods: $POD_LIST"
+
+              echo "$POD_LIST" | while read LINE; do
+                NETWORK=$(echo $LINE | awk '{print $1}')
+                TARGET=$(echo $LINE | awk '{print $2}')
+                POD_IP=$(echo $LINE | awk '{print $3}')
+                RECORD_ID=$(echo $LINE | awk '{print $4}')
+
+                if [ -n "$POD_IP" ] && [ -n "$TARGET" ]; then
+                  echo "Updating DDNS: $TARGET -> $POD_IP"
+
+                  curl -X PUT "https://api.cloudflare.com/client/v4/zones/$DDNS_ZONE_ID/dns_records/$RECORD_ID" \
+                    -H "Authorization: Bearer $DDNS_API_TOKEN" \
+                    -H "Content-Type: application/json" \
+                    --data '{"type":"A","name":"'$TARGET'","content":"'$POD_IP'","ttl":120,"proxied":false}'
+                else
+                  echo "Skipping invalid entry: $LINE"
+                fi
+              done
+
+              sleep 300;
+            done
+        env:
+          - name: DDNS_ZONE_ID
+            value: {{ .Values.multus.ddns.zoneId }}
+          - name: DDNS_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: ddns-updater
+                key: api-token
+{{ end }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ddns-updater
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ddns-updater-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ddns-updater-binding
+subjects:
+  - kind: ServiceAccount
+    name: ddns-updater
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: ddns-updater-role
+  apiGroup: rbac.authorization.k8s.io
